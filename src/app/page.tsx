@@ -7,7 +7,7 @@ export default function HomePage() {
         <div className="max-w-md">
           <h1 className="text-5xl font-bold">Tripa</h1>
           <p className="py-6">
-            Keep track of your travels and aventures with Tripa. Add locations,
+            Keep track of your travels and adventures with Tripa. Add locations,
             photos and notes to create a personalized travel journal.
           </p>
           <GithubSignInButton />
