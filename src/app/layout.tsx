@@ -1,3 +1,4 @@
+import NavBar from '@/components/NavBar';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
@@ -28,7 +29,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="flex min-h-screen flex-col">
+          <NavBar />
+          <main>{children}</main>
+        </div>
       </body>
     </html>
   );
