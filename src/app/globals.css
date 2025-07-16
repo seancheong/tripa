@@ -1,9 +1,5 @@
 @import 'tailwindcss';
-@plugin "daisyui" {
-  themes:
-    winter --default,
-    night --prefersdark;
-}
+@plugin "daisyui";
 
 body {
   font-family: Arial, Helvetica, sans-serif;
