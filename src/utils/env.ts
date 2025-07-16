@@ -6,27 +6,24 @@ const EnvSchema = z.object({
 
 export type EnvSchemaType = z.infer<typeof EnvSchema>;
 
-tryParseEnv(EnvSchema);
-
-export default EnvSchema.parse(process.env);
+export default tryParseEnv(EnvSchema);
 
 function tryParseEnv<T extends ZodRawShape>(
-  EnvSchema: ZodObject<T>,
+  schema: ZodObject<T>,
   buildEnv: Record<string, string | undefined> = process.env,
 ) {
   try {
-    EnvSchema.parse(buildEnv);
+    return schema.parse(buildEnv);
   } catch (error) {
     if (error instanceof ZodError) {
       let message = 'Missing required values in .env:\n';
       error.issues.forEach((issue) => {
         message += `${String(issue.path[0])}\n`;
       });
-      const e = new Error(message);
-      e.stack = '';
-      throw e;
+      throw new Error(message);
     } else {
-      console.error(error);
+      console.error('Unexpected error during environment validation:', error);
+      throw error;
     }
   }
 }
