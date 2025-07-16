@@ -47,15 +47,18 @@ function ThemeToggleButton() {
   };
 
   return (
-    <label className="label mx-4" aria-label="Toggle theme">
-      <SunIcon size={16} aria-label="Light mode" />
+    <label
+      className="label mx-4 items-center"
+      aria-label="Toggle between light and dark theme"
+    >
+      <SunIcon size={16} aria-label="Light theme" />
       <input
         type="checkbox"
         checked={isDark}
         onChange={toggleTheme}
         className="toggle toggle-sm border-white bg-black text-white checked:border-white checked:bg-black checked:text-white"
       />
-      <MoonIcon size={16} aria-label="Dark mode" />
+      <MoonIcon size={16} aria-label="Dark theme" />
     </label>
   );
 }
