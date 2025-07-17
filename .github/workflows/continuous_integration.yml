@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: Build
     env:
-      NODE_ENV: development
       TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
       TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
 
