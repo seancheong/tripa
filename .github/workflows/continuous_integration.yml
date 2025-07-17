@@ -7,6 +7,10 @@ on:
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
+    environment: Build
+    env:
+      TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+      TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
 
     strategy:
       matrix:
