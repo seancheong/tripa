@@ -1,9 +1,9 @@
 import NavBar from '@/components/NavBar';
 import '@/utils/env';
 import type { Metadata } from 'next';
-import { ThemeProvider } from 'next-themes';
 import { Geist, Geist_Mono } from 'next/font/google';
 
+import ClientProviders from './ClientProviders';
 import MainContainer from './MainContainer';
 import './globals.css';
 
@@ -32,12 +32,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider defaultTheme="system" attribute="class" enableSystem>
+        <ClientProviders>
           <MainContainer>
             <NavBar />
             <main>{children}</main>
           </MainContainer>
-        </ThemeProvider>
+        </ClientProviders>
       </body>
     </html>
   );
