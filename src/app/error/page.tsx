@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 
 export default function ErrorPage() {
   const searchParams = useSearchParams();
-  const error = searchParams.toString() || 'An unknow error occurs';
+  const error = searchParams.get('error') || 'An unknown error occurred';
 
   return (
     <div className="hero bg-base-200 container mx-auto mt-4">
