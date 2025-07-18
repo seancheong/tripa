@@ -1,4 +1,5 @@
 import { LogOutIcon } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 interface ProfileDropDownButtonProps {
@@ -16,7 +17,7 @@ export default function ProfileDropDownButton({
         {image && (
           <div className="avatar">
             <div className="w-6 rounded-full">
-              <img src={image} alt={name} />
+              <Image src={image} alt={name} width={24} height={24} />
             </div>
           </div>
         )}
