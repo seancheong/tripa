@@ -1,7 +1,7 @@
 'use client';
 
-import NextErrorPage from '@/app/error';
+import SharedErrorPage from '@/app/error';
 
 export default function ErrorPage() {
-  return <NextErrorPage />;
+  return <SharedErrorPage />;
 }

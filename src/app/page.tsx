@@ -19,10 +19,8 @@ export default async function HomePage() {
             photos and notes to create a personalized travel journal.
           </p>
           {session ? (
-            <Link href="/dashboard" passHref>
-              <button className="btn btn-accent">
-                Go to Dashboard <ArrowRightIcon size={16} />
-              </button>
+            <Link href="/dashboard" className="btn btn-accent">
+              Go to Dashboard <ArrowRightIcon size={16} />
             </Link>
           ) : (
             <GithubSignInButton />

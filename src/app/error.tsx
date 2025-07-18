@@ -15,10 +15,8 @@ export default function ErrorPage() {
           <h1 className="text-5xl font-bold text-red-500">Oops!</h1>
           <p className="py-6 text-red-500">{error}</p>
 
-          <Link href="/" passHref>
-            <button className="btn btn-accent">
-              Home <ArrowLeftIcon />
-            </button>
+          <Link href="/" className="btn btn-accent">
+            Home <ArrowLeftIcon />
           </Link>
         </div>
       </div>
