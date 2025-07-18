@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         errorCallbackURL: '/error',
       });
     } catch (err) {
+      setLoading(false);
       console.error('Github login failed', err);
       throw err;
     }

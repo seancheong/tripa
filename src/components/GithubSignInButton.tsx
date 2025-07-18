@@ -27,7 +27,7 @@ export default function GithubSignInButton() {
           >
             <li>
               <Link href="/signout">
-                <LogOutIcon />
+                <LogOutIcon size={16} />
                 Sign Out
               </Link>
             </li>
