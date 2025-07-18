@@ -1,20 +1,27 @@
+import { User } from 'better-auth';
 import { createAuthClient } from 'better-auth/react';
+import { redirect } from 'next/navigation';
 import { PropsWithChildren, createContext, useContext, useState } from 'react';
 
 const authClient = createAuthClient();
 
 type AuthContextType = {
   loading: boolean;
+  user?: User;
   githubSignIn: () => Promise<void>;
+  signOut: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType>({
   loading: false,
   githubSignIn: async () => {},
+  signOut: async () => {},
 });
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState(false);
+
+  const session = authClient.useSession();
 
   const githubSignIn = async () => {
     setLoading(true);
@@ -30,8 +37,22 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
+  const signOut = async () => {
+    await authClient.signOut();
+    redirect('/');
+  };
+
   return (
-    <AuthContext value={{ loading, githubSignIn }}>{children}</AuthContext>
+    <AuthContext
+      value={{
+        loading,
+        user: session.data?.user,
+        githubSignIn,
+        signOut,
+      }}
+    >
+      {children}
+    </AuthContext>
   );
 };
 
