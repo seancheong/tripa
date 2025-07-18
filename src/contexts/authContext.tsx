@@ -1,6 +1,6 @@
 import { User } from 'better-auth';
 import { createAuthClient } from 'better-auth/react';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { PropsWithChildren, createContext, useContext, useState } from 'react';
 
 const authClient = createAuthClient();
@@ -21,6 +21,7 @@ const AuthContext = createContext<AuthContextType>({
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState(false);
 
+  const router = useRouter();
   const session = authClient.useSession();
 
   const githubSignIn = async () => {
@@ -40,7 +41,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const signOut = async () => {
     await authClient.signOut();
-    redirect('/');
+    router.push('/');
+    router.refresh();
   };
 
   return (
