@@ -26,29 +26,30 @@ export async function addLocation(data: AddLocationFormData) {
     throw new Error('Unauthorized');
   }
 
+  const userId = parseInt(session.user.id, 10);
+  if (isNaN(userId)) {
+    throw new Error('Invalid user ID');
+  }
+
   const parsed = InsertLocation.safeParse(data);
   if (!parsed.success) {
     throw new Error('Invalid data for add location');
   }
 
   let slug = slugify(parsed.data.name);
-  let existing = !!findLocationBySlug(slug);
+  let existing = !!(await findLocationBySlug(slug));
 
   while (existing) {
     const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 8);
-    const newSlug = `${slug}-${nanoid}`;
-    existing = !!findLocationBySlug(newSlug);
-
-    if (!existing) {
-      slug = newSlug;
-    }
+    slug = `${slug}-${nanoid()}`;
+    existing = !!(await findLocationBySlug(slug));
   }
 
   const [created] = await db
     .insert(location)
     .values({
       ...parsed.data,
-      userId: Number(session.user.id),
+      userId,
       slug,
     })
     .returning();

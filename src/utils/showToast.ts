@@ -12,7 +12,9 @@ export const showToast = ({
 
   const toast = document.createElement('div');
   toast.className = `alert ${type ? `alert-${type}` : undefined} text-sm shadow-lg`;
-  toast.innerHTML = `<span>${message}</span>`;
+  const span = document.createElement('span');
+  span.textContent = message;
+  toast.appendChild(span);
   toastContainer.appendChild(toast);
 
   setTimeout(() => toast.remove(), duration);
