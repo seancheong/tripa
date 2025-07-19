@@ -37,11 +37,12 @@ export async function addLocation(data: AddLocationFormData) {
   }
 
   let slug = slugify(parsed.data.name);
+  const baseSlug = slug;
   let existing = !!(await findLocationBySlug(slug));
 
   while (existing) {
     const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 8);
-    slug = `${slug}-${nanoid()}`;
+    slug = `${baseSlug}-${nanoid()}`;
     existing = !!(await findLocationBySlug(slug));
   }
 

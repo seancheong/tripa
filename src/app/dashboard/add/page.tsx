@@ -64,7 +64,7 @@ export default function LocationAddPage() {
           <textarea
             {...register('description')}
             rows={5}
-            className={`textarea w-full ${errors.description && 'input-error'}`}
+            className={`textarea w-full ${errors.description && 'textarea-error'}`}
           />
         </FormField>
 

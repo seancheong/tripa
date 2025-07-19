@@ -11,7 +11,10 @@ export const showToast = ({
   if (!toastContainer) return;
 
   const toast = document.createElement('div');
-  toast.className = `alert ${type ? `alert-${type}` : undefined} text-sm shadow-lg`;
+  toast.setAttribute('role', 'alert');
+  toast.setAttribute('aria-live', 'polite');
+  toast.setAttribute('aria-atomic', 'true');
+  toast.className = `alert ${type ? `alert-${type}` : ''} text-sm shadow-lg`;
   const span = document.createElement('span');
   span.textContent = message;
   toast.appendChild(span);
