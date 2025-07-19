@@ -12,8 +12,8 @@ export default function ErrorPage() {
     <div className="hero bg-base-200 container mx-auto mt-4">
       <div className="hero-content min-h-96 text-center">
         <div className="max-w-md">
-          <h1 className="text-5xl font-bold text-red-500">Oops!</h1>
-          <p className="py-6 text-red-500">{error}</p>
+          <h1 className="text-error text-5xl font-bold">Oops!</h1>
+          <p className="text-error py-6">{error}</p>
 
           <Link href="/" className="btn btn-accent">
             Home <ArrowLeftIcon />

@@ -37,6 +37,7 @@ export default function RootLayout({
           <MainContainer>
             <NavBar />
             <main className="flex flex-1 flex-col">{children}</main>
+            <div className="toast z-50" id="daisy-toast" />
           </MainContainer>
         </ClientProviders>
       </body>

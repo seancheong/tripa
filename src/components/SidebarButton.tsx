@@ -22,7 +22,7 @@ export default function SidebarButton({
       <Link
         aria-label={label}
         href={href}
-        className={`btn ${showLabel ? 'justify-start' : 'justify-center'}`}
+        className={`btn w-full ${showLabel ? 'justify-start' : 'justify-center'}`}
       >
         {icon}
         {showLabel && label}
