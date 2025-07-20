@@ -24,7 +24,7 @@ export default function Sidebar({ locationList }: SidebarProps) {
 
   return (
     <div
-      className={`bg-base-200 transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-16'}`}
+      className={`bg-base-200 shrink-0 transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-16'}`}
     >
       <div
         className={`flex p-2 ${isSidebarOpen ? 'justify-end' : 'justify-center'}`}

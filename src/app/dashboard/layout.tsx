@@ -17,11 +17,15 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
         }
       />
 
-      <div className="flex flex-1 flex-col">
-        <div>{children}</div>
+      <div className="flex-1 overflow-auto">
+        <div className="flex size-full flex-col">
+          <div>{children}</div>
 
-        <div className="flex-1 p-4">
-          <MapView />
+          <div className="flex-1 p-4">
+            <Suspense>
+              <MapView locationsData={locationsData} />
+            </Suspense>
+          </div>
         </div>
       </div>
     </div>

@@ -14,9 +14,12 @@ export default function LocationList({ locationsData }: LocationListProps) {
   const locations = use(locationsData);
 
   return locations.length > 0 ? (
-    <ul className="mt-4 flex flex-wrap gap-2">
+    <ul className="mt-4 flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden">
       {locations.map(({ id, name, description }) => (
-        <li key={id} className="card card-compact bg-base-300 h-28 w-72">
+        <li
+          key={id}
+          className="card card-compact bg-base-300 h-28 w-72 shrink-0"
+        >
           <div className="card-body">
             <h3>{name}</h3>
             <p>{description}</p>
