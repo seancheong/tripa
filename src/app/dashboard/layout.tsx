@@ -1,4 +1,4 @@
-import Map from '@/components/Map';
+import MapView from '@/components/MapView';
 import Sidebar from '@/components/Sidebar';
 import SidebarLocationList from '@/components/SidebarLocationList';
 import { getLocations } from '@/features/location/actions/locationAction';
@@ -21,7 +21,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
         <div>{children}</div>
 
         <div className="flex-1 p-4">
-          <Map />
+          <MapView />
         </div>
       </div>
     </div>

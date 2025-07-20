@@ -5,14 +5,14 @@ import { Map as MapLibre } from '@vis.gl/react-maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useTheme } from 'next-themes';
 
-export default function Map() {
+export default function MapView() {
   const { resolvedTheme } = useTheme();
 
   return (
     <MapLibre
       initialViewState={{
-        latitude: KUALA_LUMPUR.latitude,
-        longitude: KUALA_LUMPUR.longitude,
+        latitude: KUALA_LUMPUR.lat,
+        longitude: KUALA_LUMPUR.long,
         zoom: 5,
       }}
       style={{ width: '100%', height: '100%' }}
