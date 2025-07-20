@@ -1,5 +1,6 @@
 'use client';
 
+import { useSidebar } from '@/contexts/sidebarContext';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -7,26 +8,16 @@ import {
   LogOutIcon,
   MapIcon,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 
 import SidebarButton from './SidebarButton';
 
-const isSidebarOpenKey = 'isTripaSidebarOpen';
+interface SidebarProps {
+  locationList: ReactNode;
+}
 
-export default function Sidebar() {
-  const [isSidebarOpen, setSidebarOpen] = useState<boolean | null>(null);
-
-  const toggleSidebar = () => {
-    if (isSidebarOpen === null) return;
-
-    setSidebarOpen(!isSidebarOpen);
-    localStorage.setItem(isSidebarOpenKey, String(!isSidebarOpen));
-  };
-
-  useEffect(() => {
-    const saved = localStorage.getItem(isSidebarOpenKey);
-    setSidebarOpen(saved === 'true');
-  }, []);
+export default function Sidebar({ locationList }: SidebarProps) {
+  const { isSidebarOpen, toggleSidebar } = useSidebar();
 
   // Prevent sidebar from rendering if it is null, to prevent flickering
   if (isSidebarOpen === null) return null;
@@ -61,6 +52,8 @@ export default function Sidebar() {
           label="Add Location"
           icon={<CirclePlusIcon size={16} />}
         />
+
+        {locationList}
 
         <div className="divider" />
 

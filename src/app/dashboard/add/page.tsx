@@ -1,14 +1,14 @@
 'use client';
 
+import { InsertLocation } from '@/db/schema';
 import {
   type AddLocationFormData,
   addLocation,
-} from '@/actions/locationAction';
-import { InsertLocation } from '@/db/schema';
+} from '@/features/location/actions/locationAction';
 import { showToast } from '@/utils/showToast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useState } from 'react';
 import { FieldError, SubmitHandler, useForm } from 'react-hook-form';
 
 export default function LocationAddPage() {
@@ -17,18 +17,22 @@ export default function LocationAddPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<AddLocationFormData>({
     defaultValues: { name: '', description: '', lat: 0, long: 0 },
     resolver: zodResolver(InsertLocation),
   });
 
+  const [isFormSubmitting, setFormSubmitting] = useState(false);
+
   const submitHandler: SubmitHandler<AddLocationFormData> = async (data) => {
     try {
+      setFormSubmitting(true);
       await addLocation(data);
       showToast({ message: 'New location added' });
       router.push('/dashboard');
     } catch (error) {
+      setFormSubmitting(false);
       showToast({
         message: 'Failed to add location. Please try again.',
         type: 'error',
@@ -89,7 +93,7 @@ export default function LocationAddPage() {
         <div className="flex justify-end gap-2">
           <button
             type="button"
-            disabled={isSubmitting}
+            disabled={isFormSubmitting}
             className="btn btn-outline min-w-20"
             onClick={() => router.back()}
           >
@@ -98,10 +102,10 @@ export default function LocationAddPage() {
 
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isFormSubmitting}
             className="btn btn-primary min-w-20"
           >
-            {isSubmitting ? (
+            {isFormSubmitting ? (
               <span className="loading loading-spinner loading-sm"></span>
             ) : (
               'Add'
