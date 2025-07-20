@@ -20,6 +20,22 @@ function findLocationBySlug(slug: string) {
   });
 }
 
+export async function getLocations() {
+  const session = await getSession();
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+
+  const userId = parseInt(session.user.id, 10);
+  if (isNaN(userId)) {
+    throw new Error('Invalid user ID');
+  }
+
+  return db.query.location.findMany({
+    where: eq(location.userId, userId),
+  });
+}
+
 export async function addLocation(data: AddLocationFormData) {
   const session = await getSession();
   if (!session) {
