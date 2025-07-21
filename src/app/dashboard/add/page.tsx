@@ -5,21 +5,35 @@ import {
   type AddLocationFormData,
   addLocation,
 } from '@/features/location/actions/locationAction';
+import LocationSearch, {
+  NominatimResult,
+} from '@/features/location/components/LocationSearch';
+import { useLocation } from '@/features/location/contexts/locationContext';
+import { KUALA_LUMPUR } from '@/utils/constants';
 import { showToast } from '@/utils/showToast';
+import MapPinIcon from '@heroicons/react/24/solid/MapPinIcon';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { PropsWithChildren, useState } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { FieldError, SubmitHandler, useForm } from 'react-hook-form';
 
 export default function LocationAddPage() {
   const router = useRouter();
+  const { newLocation, setNewLocation } = useLocation();
 
   const {
     register,
     handleSubmit,
+    getValues,
+    setValue,
     formState: { errors },
   } = useForm<AddLocationFormData>({
-    defaultValues: { name: '', description: '', lat: 0, long: 0 },
+    defaultValues: {
+      name: '',
+      description: '',
+      lat: KUALA_LUMPUR.lat,
+      long: KUALA_LUMPUR.long,
+    },
     resolver: zodResolver(InsertLocation),
   });
 
@@ -41,8 +55,36 @@ export default function LocationAddPage() {
     }
   };
 
+  const formatNumber = (value: number) => {
+    return value.toFixed(5);
+  };
+
+  const handleResultSelected = (result: NominatimResult) => {
+    setNewLocation({
+      lat: parseInt(result.lat, 10),
+      long: parseInt(result.lon, 10),
+    });
+    setValue('name', result.display_name);
+  };
+
+  useEffect(() => {
+    setNewLocation({
+      lat: KUALA_LUMPUR.lat,
+      long: KUALA_LUMPUR.long,
+    });
+
+    return () => setNewLocation(null);
+  }, [setNewLocation]);
+
+  useEffect(() => {
+    if (newLocation) {
+      setValue('lat', newLocation.lat);
+      setValue('long', newLocation.long);
+    }
+  }, [newLocation, setValue]);
+
   return (
-    <div className="container mx-auto mt-4 max-w-md">
+    <div className="container mx-auto mt-4 max-w-md p-4">
       <div className="my-4">
         <h1 className="text-lg">Add Location</h1>
 
@@ -72,23 +114,16 @@ export default function LocationAddPage() {
           />
         </FormField>
 
-        <FormField label="Latitude" error={errors.lat}>
-          <input
-            {...register('lat', { valueAsNumber: true })}
-            type="number"
-            step="any"
-            className={`input w-full ${errors.lat && 'input-error'}`}
-          />
-        </FormField>
-
-        <FormField label="Longitude" error={errors.long}>
-          <input
-            {...register('long', { valueAsNumber: true })}
-            type="number"
-            step="any"
-            className={`input w-full ${errors.long && 'input-error'}`}
-          />
-        </FormField>
+        <p className="text-xs text-gray-400">{`Current coordinates: ${formatNumber(getValues('lat'))} ${formatNumber(getValues('long'))}`}</p>
+        <p>To set the coordinates:</p>
+        <ul className="ml-4 list-disc text-sm">
+          <li>
+            Drag the <MapPinIcon className="text-info inline-flex size-4" />{' '}
+            marker to your desired location.
+          </li>
+          <li>Double click on your desired location on the map.</li>
+          <li>Search for a location below.</li>
+        </ul>
 
         <div className="flex justify-end gap-2">
           <button
@@ -113,6 +148,10 @@ export default function LocationAddPage() {
           </button>
         </div>
       </form>
+
+      <div className="divider" />
+
+      <LocationSearch onResultSelected={handleResultSelected} />
     </div>
   );
 }
