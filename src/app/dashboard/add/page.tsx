@@ -5,6 +5,9 @@ import {
   type AddLocationFormData,
   addLocation,
 } from '@/features/location/actions/locationAction';
+import LocationSearch, {
+  NominatimResult,
+} from '@/features/location/components/LocationSearch';
 import { useLocation } from '@/features/location/contexts/locationContext';
 import { KUALA_LUMPUR } from '@/utils/constants';
 import { showToast } from '@/utils/showToast';
@@ -56,6 +59,14 @@ export default function LocationAddPage() {
     return value.toFixed(5);
   };
 
+  const handleResultSelected = (result: NominatimResult) => {
+    setNewLocation({
+      lat: parseInt(result.lat, 10),
+      long: parseInt(result.lon, 10),
+    });
+    setValue('name', result.display_name);
+  };
+
   useEffect(() => {
     setNewLocation({
       lat: KUALA_LUMPUR.lat,
@@ -103,14 +114,16 @@ export default function LocationAddPage() {
           />
         </FormField>
 
-        <p>
-          Drag the <MapPinIcon className="text-info inline-flex size-4" />{' '}
-          marker to your desired location.
-        </p>
-
-        <p>Or double click on the map.</p>
-
-        <p className="text-xs text-gray-400">{`Current location: ${formatNumber(getValues('lat'))} ${formatNumber(getValues('long'))}`}</p>
+        <p className="text-xs text-gray-400">{`Current coordinates: ${formatNumber(getValues('lat'))} ${formatNumber(getValues('long'))}`}</p>
+        <p>To set the coordinates:</p>
+        <ul className="ml-4 list-disc text-sm">
+          <li>
+            Drag the <MapPinIcon className="text-info inline-flex size-4" />{' '}
+            marker to your desired location.
+          </li>
+          <li>Double click on your desired location on the map.</li>
+          <li>Search for a location below.</li>
+        </ul>
 
         <div className="flex justify-end gap-2">
           <button
@@ -135,6 +148,10 @@ export default function LocationAddPage() {
           </button>
         </div>
       </form>
+
+      <div className="divider" />
+
+      <LocationSearch onResultSelected={handleResultSelected} />
     </div>
   );
 }

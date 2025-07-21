@@ -6,7 +6,6 @@ import {
   getLocations,
 } from '@/features/location/actions/locationAction';
 import { useLocation } from '@/features/location/contexts/locationContext';
-import useWatch from '@/hooks/useWatch';
 import { KUALA_LUMPUR } from '@/utils/constants';
 import MapPinIcon from '@heroicons/react/24/solid/MapPinIcon';
 import {
@@ -83,6 +82,7 @@ export default function MapView({ locationsData }: MapViewProps) {
           longitude={newLocation.long}
           draggable
           onDragEnd={handleDragEnd}
+          className="z-50"
         >
           <div
             className="tooltip tooltip-top hover:cursor-pointer"
@@ -147,15 +147,16 @@ function AutoFitBoundsAndZoom({
   const map = useMap();
   const boundsRef = useRef<LngLatBounds | null>(null);
 
-  useWatch(newLocation, (newValue, oldValue) => {
-    if (newValue && !oldValue) {
+  // Effect to zoom into a location in map, whenever a new location is being created
+  useEffect(() => {
+    if (map.current && newLocation) {
       map.current?.flyTo({
-        center: [newValue.long, newValue.lat],
+        center: [newLocation.long, newLocation.lat],
         speed: 0.8,
         zoom: 6,
       });
     }
-  });
+  }, [newLocation, map]);
 
   // Effect to create a resonable bounds that able to show all saved locations
   useEffect(() => {
