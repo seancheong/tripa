@@ -8,6 +8,7 @@ import { customAlphabet } from 'nanoid';
 import slugify from 'slug';
 
 export type Location = Awaited<ReturnType<typeof getLocations>>[number];
+export type NewLocation = Pick<Location, 'lat' | 'long'>;
 
 export type AddLocationFormData = {
   name: string;

@@ -5,7 +5,9 @@ import LocationProviderWrapper from '@/features/location/components/LocationProv
 import SidebarLocationList from '@/features/location/components/SidebarLocationList';
 import { PropsWithChildren, Suspense } from 'react';
 
-export default function DashboardLayout({ children }: PropsWithChildren) {
+import Container from './Container';
+
+export default async function DashboardLayout({ children }: PropsWithChildren) {
   const locationsData = getLocations();
 
   return (
@@ -19,8 +21,8 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
           }
         />
 
-        <div className="flex-1 overflow-auto">
-          <div className="flex size-full flex-col">
+        <div className="bg-base-200 flex-1 overflow-auto">
+          <Container>
             <div>{children}</div>
 
             <div className="flex-1 p-4">
@@ -28,7 +30,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                 <MapView locationsData={locationsData} />
               </Suspense>
             </div>
-          </div>
+          </Container>
         </div>
       </div>
     </LocationProviderWrapper>
