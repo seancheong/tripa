@@ -1,5 +1,5 @@
-import LocationList from '@/features/components/LocationList';
 import { getLocations } from '@/features/location/actions/locationAction';
+import LocationList from '@/features/location/components/LocationList';
 import { Suspense } from 'react';
 
 export default function DashboardPage() {
