@@ -8,7 +8,7 @@ export default function SignOut() {
 
   useEffect(() => {
     signOut();
-  }, []);
+  }, [signOut]);
 
   return (
     <div className="card bg-base-200 container mx-auto mt-4 flex min-h-72 flex-col items-center justify-center">

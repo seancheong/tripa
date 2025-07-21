@@ -7,6 +7,8 @@ import { eq } from 'drizzle-orm';
 import { customAlphabet } from 'nanoid';
 import slugify from 'slug';
 
+export type Location = Awaited<ReturnType<typeof getLocations>>[number];
+
 export type AddLocationFormData = {
   name: string;
   description: string | null;

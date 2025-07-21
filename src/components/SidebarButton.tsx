@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { ReactNode } from 'react';
+import { HTMLAttributes, ReactNode } from 'react';
 
-interface SidebarButtonProps {
+interface SidebarButtonProps extends HTMLAttributes<HTMLDivElement> {
   showLabel: boolean;
   label: string;
   icon: ReactNode;
@@ -13,9 +13,11 @@ export default function SidebarButton({
   label,
   icon,
   href,
+  ...props
 }: SidebarButtonProps) {
   return (
     <div
+      {...props}
       className={`${showLabel ? '' : 'tooltip'} tooltip-right`}
       data-tip={showLabel ? undefined : label}
     >
