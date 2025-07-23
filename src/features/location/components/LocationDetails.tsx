@@ -21,7 +21,8 @@ export default function LocationDetails({
     if (location) setSelectedLocation(location);
   }, [location, setSelectedLocation]);
 
-  if (!location) return <h2 className="text-error text-lg">Page not found</h2>;
+  if (!location)
+    return <h2 className="text-error text-lg">Location not found</h2>;
 
   return (
     <>
