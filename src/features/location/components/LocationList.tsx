@@ -14,24 +14,26 @@ interface LocationListProps {
 export default function LocationList({ locationsData }: LocationListProps) {
   const locations = use(locationsData);
 
-  const { selectedLocation, setSelectedLocation } = useLocation();
+  const { selectedLocation, highlightedLocation, setHighlightedLocation } =
+    useLocation();
 
   return locations.length > 0 ? (
-    <ul className="mt-4 flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden">
+    <div className="mt-4 flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden">
       {locations.map((location) => (
-        <li
+        <Link
           key={location.id}
-          className={`card card-compact bg-base-300 mb-2 h-28 w-72 shrink-0 border-2 hover:cursor-pointer ${selectedLocation?.id === location.id ? 'border-accent' : 'border-transparent'}`}
-          onMouseEnter={() => setSelectedLocation(location, true)}
-          onMouseLeave={() => setSelectedLocation(null)}
+          href={`/dashboard/location/${location.slug}`}
+          className={`card card-compact bg-base-300 mb-2 h-28 w-72 shrink-0 border-2 hover:cursor-pointer ${selectedLocation?.id === location.id || highlightedLocation?.id === location.id ? 'border-accent' : 'border-transparent'}`}
+          onMouseEnter={() => setHighlightedLocation(location)}
+          onMouseLeave={() => setHighlightedLocation(null)}
         >
           <div className="card-body">
             <h3>{location.name}</h3>
             <p>{location.description}</p>
           </div>
-        </li>
+        </Link>
       ))}
-    </ul>
+    </div>
   ) : (
     <div className="mt-4 flex flex-col gap-2">
       <p>Add a location to get started</p>

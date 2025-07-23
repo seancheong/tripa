@@ -3,7 +3,7 @@
 import db from '@/db';
 import { InsertLocation, location } from '@/db/schema/location';
 import { getSession } from '@/utils/auth';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { customAlphabet } from 'nanoid';
 import slugify from 'slug';
 
@@ -20,6 +20,25 @@ export type AddLocationFormData = {
 function findLocationBySlug(slug: string) {
   return db.query.location.findFirst({
     where: eq(location.slug, slug),
+  });
+}
+
+export async function getLocation(slug: string) {
+  const session = await getSession();
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+
+  const userId = parseInt(session.user.id, 10);
+  if (isNaN(userId)) {
+    throw new Error('Invalid user ID');
+  }
+
+  return db.query.location.findFirst({
+    where: and(eq(location.userId, userId), eq(location.slug, slug)),
+    with: {
+      locationLogs: true,
+    },
   });
 }
 
