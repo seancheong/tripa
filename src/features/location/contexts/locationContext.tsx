@@ -1,48 +1,54 @@
-import { PropsWithChildren, createContext, useContext, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 import type { Location, NewLocation } from '../actions/locationAction';
 
 interface LocationContextType {
+  highlightedLocation: Location | null;
   selectedLocation: Location | null;
   newLocation: NewLocation | null;
-  shouldFly: boolean;
-  setSelectedLocation: (
-    selectedLocation: Location | null,
-    shouldFly?: boolean,
-  ) => void;
+  setHighlightedLocation: (highlightedLocation: Location | null) => void;
+  setSelectedLocation: (selectedLocation: Location | null) => void;
   setNewLocation: (newLocation: NewLocation | null) => void;
 }
 
 const LocationContext = createContext<LocationContextType>({
+  highlightedLocation: null,
   selectedLocation: null,
   newLocation: null,
-  shouldFly: false,
+  setHighlightedLocation: () => {},
   setSelectedLocation: () => {},
   setNewLocation: () => {},
 });
 
 export const LocationProvider = ({ children }: PropsWithChildren) => {
+  const pathname = usePathname();
+
+  const [highlightedLocation, setHighlightedLocation] =
+    useState<Location | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(
     null,
   );
   const [newLocation, setNewLocation] = useState<NewLocation | null>(null);
-  const [shouldFly, setShouldFly] = useState(false);
 
-  const setLocation = (
-    selectedLocation: Location | null,
-    shouldFly: boolean = false,
-  ) => {
-    setSelectedLocation(selectedLocation);
-    setShouldFly(shouldFly);
-  };
+  useEffect(() => {
+    if (!pathname.startsWith('/dashboard/location')) setSelectedLocation(null);
+  }, [pathname, setSelectedLocation]);
 
   return (
     <LocationContext
       value={{
+        highlightedLocation,
         selectedLocation,
         newLocation,
-        shouldFly,
-        setSelectedLocation: setLocation,
+        setHighlightedLocation,
+        setSelectedLocation,
         setNewLocation,
       }}
     >

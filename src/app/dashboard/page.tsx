@@ -6,7 +6,7 @@ export default function DashboardPage() {
   const locationsData = getLocations();
 
   return (
-    <div className="p-4">
+    <div className="min-h-64 p-4">
       <h2 className="text-2xl">Locations</h2>
 
       <Suspense

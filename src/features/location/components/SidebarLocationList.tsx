@@ -18,7 +18,8 @@ export default function SidebarLocationList({
   const locations = use(locationsData);
 
   const { isSidebarOpen } = useSidebar();
-  const { selectedLocation, setSelectedLocation } = useLocation();
+  const { selectedLocation, highlightedLocation, setHighlightedLocation } =
+    useLocation();
 
   if (isSidebarOpen === null || locations.length === 0) return null;
 
@@ -31,13 +32,13 @@ export default function SidebarLocationList({
           label={location.name}
           icon={
             <MapPinIcon
-              className={`size-5 ${selectedLocation?.id === location.id ? 'text-accent' : ''}`}
+              className={`size-5 ${selectedLocation?.id === location.id || highlightedLocation?.id === location.id ? 'text-accent' : ''}`}
             />
           }
-          href="#"
+          href={`/dashboard/location/${location.slug}`}
           showLabel={isSidebarOpen}
-          onMouseEnter={() => setSelectedLocation(location, true)}
-          onMouseLeave={() => setSelectedLocation(null)}
+          onMouseEnter={() => setHighlightedLocation(location)}
+          onMouseLeave={() => setHighlightedLocation(null)}
         />
       ))}
     </>

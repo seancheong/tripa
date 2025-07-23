@@ -19,6 +19,7 @@ import {
 import maplibregl, { LngLatBounds, MapLayerMouseEvent } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useTheme } from 'next-themes';
+import Link from 'next/link';
 import { use, useEffect, useRef, useState } from 'react';
 
 interface MapViewProps {
@@ -31,9 +32,9 @@ export default function MapView({ locationsData }: MapViewProps) {
 
   const {
     selectedLocation,
+    highlightedLocation,
     newLocation,
-    shouldFly,
-    setSelectedLocation,
+    setHighlightedLocation,
     setNewLocation,
   } = useLocation();
 
@@ -69,7 +70,6 @@ export default function MapView({ locationsData }: MapViewProps) {
     >
       <NavigationControl />
       <AutoFitBoundsAndZoom
-        shouldFly={shouldFly}
         locations={locations}
         selectedLocation={selectedLocation}
         newLocation={newLocation}
@@ -95,20 +95,20 @@ export default function MapView({ locationsData }: MapViewProps) {
 
       {/* Markers for already added locations */}
       {locations.map((location) => {
-        const { id, name, description, lat, long } = location;
+        const { id, name, description, lat, long, slug } = location;
 
         return (
           <div key={id}>
             <Marker latitude={lat} longitude={long}>
               <div
-                className={`tooltip tooltip-top hover:cursor-pointer ${selectedLocation?.id === id ? 'tooltip-open' : ''}`}
+                className={`tooltip tooltip-top hover:cursor-pointer ${selectedLocation?.id === id || highlightedLocation?.id === id ? 'tooltip-open' : ''}`}
                 data-tip={name}
                 onClick={() => setSelectedMarker(id)}
-                onMouseEnter={() => setSelectedLocation(location)}
-                onMouseLeave={() => setSelectedLocation(null)}
+                onMouseEnter={() => setHighlightedLocation(location)}
+                onMouseLeave={() => setHighlightedLocation(null)}
               >
                 <MapPinIcon
-                  className={`size-10 ${selectedLocation?.id === id ? 'text-accent' : 'text-secondary'}`}
+                  className={`size-10 ${selectedLocation?.id === id || highlightedLocation?.id === id ? 'text-accent' : 'text-secondary'}`}
                 />
               </div>
             </Marker>
@@ -121,7 +121,20 @@ export default function MapView({ locationsData }: MapViewProps) {
                 onClose={() => setSelectedMarker(null)}
               >
                 <h3 className="text-xl">{name}</h3>
+
                 {description && <p>{description}</p>}
+
+                {!selectedLocation && (
+                  <div className="mt-4 flex justify-end">
+                    <Link
+                      href={`/dashboard/location/${slug}`}
+                      className="btn btn-outline"
+                      onClick={() => setSelectedMarker(null)}
+                    >
+                      View
+                    </Link>
+                  </div>
+                )}
               </Popup>
             )}
           </div>
@@ -132,14 +145,12 @@ export default function MapView({ locationsData }: MapViewProps) {
 }
 
 interface AutoFitBoundsProps {
-  shouldFly: boolean;
   locations: Location[];
   selectedLocation: Location | null;
   newLocation: NewLocation | null;
 }
 
 function AutoFitBoundsAndZoom({
-  shouldFly,
   locations,
   selectedLocation,
   newLocation,
@@ -184,12 +195,11 @@ function AutoFitBoundsAndZoom({
     if (!map.current || newLocation) return;
 
     if (selectedLocation) {
-      if (shouldFly) {
-        map.current?.flyTo({
-          center: [selectedLocation.long, selectedLocation.lat],
-          speed: 0.8,
-        });
-      }
+      map.current?.flyTo({
+        center: [selectedLocation.long, selectedLocation.lat],
+        speed: 0.8,
+        zoom: 10,
+      });
     } else if (boundsRef.current) {
       map.current.fitBounds(boundsRef.current, {
         padding: 60,
@@ -197,7 +207,7 @@ function AutoFitBoundsAndZoom({
         duration: 1000,
       });
     }
-  }, [map, shouldFly, selectedLocation, newLocation]);
+  }, [map, selectedLocation, newLocation]);
 
   return null;
 }
