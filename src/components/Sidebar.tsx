@@ -96,16 +96,16 @@ function SidebarTopSection({
 
       <SidebarButton
         showLabel={isSidebarOpen}
-        href={`/dashboard/location/${selectedLocation.slug}/add`}
-        label="Add Location Log"
-        icon={<MapPinPlusIcon size={16} />}
+        href={`/dashboard/location/${selectedLocation.slug}/edit`}
+        label="Edit Location"
+        icon={<EditIcon size={16} />}
       />
 
       <SidebarButton
         showLabel={isSidebarOpen}
-        href={`/dashboard/location/${selectedLocation.slug}/edit`}
-        label="Edit Location"
-        icon={<EditIcon size={16} />}
+        href={`/dashboard/location/${selectedLocation.slug}/add`}
+        label="Add Location Log"
+        icon={<MapPinPlusIcon size={16} />}
       />
     </>
   ) : (
