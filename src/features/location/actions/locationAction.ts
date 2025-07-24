@@ -124,3 +124,26 @@ export async function updateLocation(slug: string, data: AddLocationFormData) {
 
   return updated[0];
 }
+
+export async function deleteLocation(slug: string) {
+  const session = await getSession();
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+
+  const userId = parseInt(session.user.id, 10);
+  if (isNaN(userId)) {
+    throw new Error('Invalid user ID');
+  }
+
+  const deleted = await db
+    .delete(location)
+    .where(and(eq(location.slug, slug), eq(location.userId, userId)))
+    .returning();
+
+  if (deleted.length === 0) {
+    throw new Error('Location not found or unauthorized');
+  }
+
+  return deleted[0];
+}
