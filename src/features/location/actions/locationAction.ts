@@ -95,3 +95,28 @@ export async function addLocation(data: AddLocationFormData) {
 
   return created;
 }
+
+export async function updateLocation(slug: string, data: AddLocationFormData) {
+  const session = await getSession();
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+
+  const userId = parseInt(session.user.id, 10);
+  if (isNaN(userId)) {
+    throw new Error('Invalid user ID');
+  }
+
+  const parsed = InsertLocation.safeParse(data);
+  if (!parsed.success) {
+    throw new Error('Invalid data for update location');
+  }
+
+  const updated = await db
+    .update(location)
+    .set(parsed.data)
+    .where(and(eq(location.slug, slug), eq(location.userId, userId)))
+    .returning();
+
+  return updated[0];
+}
