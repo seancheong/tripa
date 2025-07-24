@@ -34,15 +34,27 @@ export default function MapView({ locationsData }: MapViewProps) {
     selectedLocation,
     highlightedLocation,
     newLocation,
+    editedLocation,
     setHighlightedLocation,
     setNewLocation,
+    setEditedLocation,
   } = useLocation();
 
   const [selectedMarker, setSelectedMarker] = useState<number | null>(null);
 
   const handleDragEnd = (event: MarkerDragEvent) => {
+    const { lat, lng } = event.target.getLngLat();
+
     if (newLocation) {
-      setNewLocation({ lat: event.lngLat.lat, long: event.lngLat.lng });
+      setNewLocation({ lat, long: lng });
+    }
+
+    if (editedLocation) {
+      setEditedLocation({
+        ...editedLocation,
+        lat,
+        long: lng,
+      });
     }
   };
 
@@ -93,53 +105,73 @@ export default function MapView({ locationsData }: MapViewProps) {
         </Marker>
       )}
 
-      {/* Markers for already added locations */}
-      {locations.map((location) => {
-        const { id, name, description, lat, long, slug } = location;
-
-        return (
-          <div key={id}>
-            <Marker latitude={lat} longitude={long}>
-              <div
-                className={`tooltip tooltip-top hover:cursor-pointer ${selectedLocation?.id === id || highlightedLocation?.id === id ? 'tooltip-open' : ''}`}
-                data-tip={name}
-                onClick={() => setSelectedMarker(id)}
-                onMouseEnter={() => setHighlightedLocation(location)}
-                onMouseLeave={() => setHighlightedLocation(null)}
-              >
-                <MapPinIcon
-                  className={`size-10 ${selectedLocation?.id === id || highlightedLocation?.id === id ? 'text-accent' : 'text-secondary'}`}
-                />
-              </div>
-            </Marker>
-
-            {selectedMarker === id && (
-              <Popup
-                latitude={lat}
-                longitude={long}
-                closeOnClick={false}
-                onClose={() => setSelectedMarker(null)}
-              >
-                <h3 className="text-xl">{name}</h3>
-
-                {description && <p>{description}</p>}
-
-                {!selectedLocation && (
-                  <div className="mt-4 flex justify-end">
-                    <Link
-                      href={`/dashboard/location/${slug}`}
-                      className="btn btn-outline"
-                      onClick={() => setSelectedMarker(null)}
-                    >
-                      View
-                    </Link>
-                  </div>
-                )}
-              </Popup>
-            )}
+      {/* Marker show up when editing existing location */}
+      {editedLocation && (
+        <Marker
+          latitude={editedLocation.lat}
+          longitude={editedLocation.long}
+          draggable
+          onDragEnd={handleDragEnd}
+          className="z-50"
+        >
+          <div
+            className="tooltip tooltip-top hover:cursor-pointer"
+            data-tip="Drag to your desired location"
+          >
+            <MapPinIcon className="text-info size-12" />
           </div>
-        );
-      })}
+        </Marker>
+      )}
+
+      {/* Markers for already added locations */}
+      {locations
+        .filter((location) => location.id !== editedLocation?.id)
+        .map((location) => {
+          const { id, name, description, lat, long, slug } = location;
+
+          return (
+            <div key={id}>
+              <Marker latitude={lat} longitude={long}>
+                <div
+                  className={`tooltip tooltip-top hover:cursor-pointer ${selectedLocation?.id === id || highlightedLocation?.id === id ? 'tooltip-open' : ''}`}
+                  data-tip={name}
+                  onClick={() => setSelectedMarker(id)}
+                  onMouseEnter={() => setHighlightedLocation(location)}
+                  onMouseLeave={() => setHighlightedLocation(null)}
+                >
+                  <MapPinIcon
+                    className={`size-10 ${selectedLocation?.id === id || highlightedLocation?.id === id ? 'text-accent' : 'text-secondary'}`}
+                  />
+                </div>
+              </Marker>
+
+              {selectedMarker === id && (
+                <Popup
+                  latitude={lat}
+                  longitude={long}
+                  closeOnClick={false}
+                  onClose={() => setSelectedMarker(null)}
+                >
+                  <h3 className="text-xl">{name}</h3>
+
+                  {description && <p>{description}</p>}
+
+                  {!selectedLocation && (
+                    <div className="mt-4 flex justify-end">
+                      <Link
+                        href={`/dashboard/location/${slug}`}
+                        className="btn btn-outline"
+                        onClick={() => setSelectedMarker(null)}
+                      >
+                        View
+                      </Link>
+                    </div>
+                  )}
+                </Popup>
+              )}
+            </div>
+          );
+        })}
     </MapLibre>
   );
 }
@@ -161,7 +193,7 @@ function AutoFitBoundsAndZoom({
   // Effect to zoom into a location in map, whenever a new location is being created
   useEffect(() => {
     if (map.current && newLocation) {
-      map.current?.flyTo({
+      map.current.flyTo({
         center: [newLocation.long, newLocation.lat],
         speed: 0.8,
         zoom: 6,
@@ -195,7 +227,7 @@ function AutoFitBoundsAndZoom({
     if (!map.current || newLocation) return;
 
     if (selectedLocation) {
-      map.current?.flyTo({
+      map.current.flyTo({
         center: [selectedLocation.long, selectedLocation.lat],
         speed: 0.8,
         zoom: 10,
