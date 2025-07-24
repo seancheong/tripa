@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useEffect, useId, useRef } from 'react';
 
 interface DialogProps {
   open?: boolean;
@@ -22,6 +22,8 @@ export default function Dialog({
   onClose,
 }: DialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const dialogTitle = useId();
+  const dialogDescription = useId();
 
   useEffect(() => {
     const dialogEl = dialogRef.current;
@@ -40,10 +42,20 @@ export default function Dialog({
   };
 
   return (
-    <dialog ref={dialogRef} open={open} className="modal">
+    <dialog
+      ref={dialogRef}
+      open={open}
+      className="modal"
+      aria-labelledby={dialogTitle}
+      aria-describedby={dialogDescription}
+    >
       <div className="modal-box">
-        <h3 className="text-lg font-bold">{title}</h3>
-        <p className="py-4">{description}</p>
+        <h3 id={dialogTitle} className="text-lg font-bold">
+          {title}
+        </h3>
+        <p id={dialogDescription} className="py-4">
+          {description}
+        </p>
         <div className="flex justify-end gap-2">
           <button className="btn btn-outline" onClick={onClose}>
             Cancel
