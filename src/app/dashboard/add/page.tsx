@@ -20,8 +20,8 @@ export default function LocationAddPage() {
 
   const handleResultSelected = (result: NominatimResult) => {
     setNewLocation({
-      lat: parseInt(result.lat, 10),
-      long: parseInt(result.lon, 10),
+      lat: parseFloat(result.lat),
+      long: parseFloat(result.lon),
     });
   };
 

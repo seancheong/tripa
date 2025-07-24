@@ -118,5 +118,9 @@ export async function updateLocation(slug: string, data: AddLocationFormData) {
     .where(and(eq(location.slug, slug), eq(location.userId, userId)))
     .returning();
 
+  if (updated.length === 0) {
+    throw new Error('Location not found or unauthorized');
+  }
+
   return updated[0];
 }

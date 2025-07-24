@@ -13,18 +13,22 @@ interface LocationContextType {
   highlightedLocation: Location | null;
   selectedLocation: Location | null;
   newLocation: NewLocation | null;
+  editedLocation: Location | null;
   setHighlightedLocation: (highlightedLocation: Location | null) => void;
   setSelectedLocation: (selectedLocation: Location | null) => void;
   setNewLocation: (newLocation: NewLocation | null) => void;
+  setEditedLocation: (editedLocation: Location | null) => void;
 }
 
 const LocationContext = createContext<LocationContextType>({
   highlightedLocation: null,
   selectedLocation: null,
   newLocation: null,
+  editedLocation: null,
   setHighlightedLocation: () => {},
   setSelectedLocation: () => {},
   setNewLocation: () => {},
+  setEditedLocation: () => {},
 });
 
 export const LocationProvider = ({ children }: PropsWithChildren) => {
@@ -36,6 +40,7 @@ export const LocationProvider = ({ children }: PropsWithChildren) => {
     null,
   );
   const [newLocation, setNewLocation] = useState<NewLocation | null>(null);
+  const [editedLocation, setEditedLocation] = useState<Location | null>(null);
 
   useEffect(() => {
     if (!pathname.startsWith('/dashboard/location')) setSelectedLocation(null);
@@ -47,9 +52,11 @@ export const LocationProvider = ({ children }: PropsWithChildren) => {
         highlightedLocation,
         selectedLocation,
         newLocation,
+        editedLocation,
         setHighlightedLocation,
         setSelectedLocation,
         setNewLocation,
+        setEditedLocation,
       }}
     >
       {children}

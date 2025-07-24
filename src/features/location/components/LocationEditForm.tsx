@@ -24,22 +24,26 @@ export default function LocationEditForm({
   const location = use(locationData);
 
   const router = useRouter();
-  const { setSelectedLocation } = useLocation();
+  const { editedLocation, setEditedLocation, setSelectedLocation } =
+    useLocation();
   const [isFormSubmitting, setFormSubmitting] = useState(false);
 
   useEffect(() => {
     if (location) {
       setSelectedLocation(location);
+      setEditedLocation(location);
     }
-  }, [location, setSelectedLocation]);
+
+    return () => setEditedLocation(null);
+  }, [location, setSelectedLocation, setEditedLocation]);
 
   if (!location) return null;
 
   const handleResultSelected = (result: NominatimResult) => {
-    setSelectedLocation({
+    setEditedLocation({
       ...location,
-      lat: parseInt(result.lat, 10),
-      long: parseInt(result.lon, 10),
+      lat: parseFloat(result.lat),
+      long: parseFloat(result.lon),
     });
   };
 
@@ -69,7 +73,7 @@ export default function LocationEditForm({
         lat: location.lat,
         long: location.long,
       }}
-      newCoordinates={{ lat: location.lat, long: location.long }}
+      newCoordinates={editedLocation}
       onResultSelected={handleResultSelected}
       submitHandler={submitHandler}
     />

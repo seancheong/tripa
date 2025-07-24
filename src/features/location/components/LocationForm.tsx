@@ -33,21 +33,26 @@ export default function LocationForm({
   const {
     register,
     handleSubmit,
-    getValues,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<AddLocationFormData>({
     defaultValues,
     resolver: zodResolver(InsertLocation),
   });
 
-  const formatNumber = (value: number) => {
-    return value.toFixed(5);
+  const watchedLat = watch('lat');
+  const watchedLong = watch('long');
+
+  const formatNumber = (value: number, precision: number = 5) => {
+    return value.toFixed(precision);
   };
 
   const handleResultSelected = (result: NominatimResult) => {
     onResultSelected(result);
     setValue('name', result.display_name);
+    setValue('lat', parseFloat(result.lat));
+    setValue('long', parseFloat(result.lon));
   };
 
   useEffect(() => {
@@ -78,7 +83,7 @@ export default function LocationForm({
           />
         </FormField>
 
-        <p className="text-xs text-gray-400">{`Current coordinates: ${formatNumber(getValues('lat'))} ${formatNumber(getValues('long'))}`}</p>
+        <p className="text-xs text-gray-400">{`Current coordinates: ${formatNumber(watchedLat)} ${formatNumber(watchedLong)}`}</p>
         <p>To set the coordinates:</p>
         <ul className="ml-4 list-disc text-sm">
           <li>
