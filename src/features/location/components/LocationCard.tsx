@@ -23,7 +23,7 @@ export default function LocationCard({
       <div className="card-body">
         {children}
         <h3 className="text-xl">{title}</h3>
-        <p>{description}</p>
+        {description && <p>{description}</p>}
       </div>
     </Link>
   );

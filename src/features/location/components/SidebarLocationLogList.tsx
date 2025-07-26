@@ -19,8 +19,8 @@ export default function SidebarLocationLogList({
   const locations = use(locationsData);
 
   const pathname = usePathname();
-  const segments = pathname.split('/');
-  const slug = segments.length >= 4 ? segments[3] : null;
+  const slugMatch = pathname.match(/\/dashboard\/location\/([^\/]+)/);
+  const slug = slugMatch?.[1] || null;
   const location = locations.find((location) => location.slug === slug);
 
   const { selectedLog, setSelectedLog } = useLocationLog();

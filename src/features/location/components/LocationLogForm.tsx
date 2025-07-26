@@ -37,10 +37,6 @@ export default function LocationLogForm({
   const watchedStartedAt = watch('startedAt');
   const watchedEndedAt = watch('endedAt');
 
-  const handleStartedAtBlur = () => {};
-
-  const handleEndedAtBlur = () => {};
-
   return (
     <form
       className="flex flex-col gap-2"
@@ -65,7 +61,6 @@ export default function LocationLogForm({
         <input
           {...register('startedAt', {
             setValueAs: (value) => new Date(value).getTime(),
-            onBlur: handleStartedAtBlur,
           })}
           type="date"
           value={formatDate(watchedStartedAt)}
@@ -77,7 +72,6 @@ export default function LocationLogForm({
         <input
           {...register('endedAt', {
             setValueAs: (value) => new Date(value).getTime(),
-            onBlur: handleEndedAtBlur,
           })}
           type="date"
           value={formatDate(watchedEndedAt)}
