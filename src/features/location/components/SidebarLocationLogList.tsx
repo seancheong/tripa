@@ -23,7 +23,7 @@ export default function SidebarLocationLogList({
   const slug = slugMatch?.[1] || null;
   const location = locations.find((location) => location.slug === slug);
 
-  const { selectedLog, setSelectedLog } = useLocationLog();
+  const { selectedLog, highlightedLog, setHighlightedLog } = useLocationLog();
   const { isSidebarOpen } = useSidebar();
 
   if (isSidebarOpen === null || !location || location.locationLogs.length === 0)
@@ -38,13 +38,13 @@ export default function SidebarLocationLogList({
           label={log.name}
           icon={
             <MapPinIcon
-              className={`size-5 ${selectedLog?.id === log.id ? 'text-accent' : ''}`}
+              className={`size-5 ${selectedLog?.id === log.id || highlightedLog?.id === log.id ? 'text-accent' : ''}`}
             />
           }
           href={`/dashboard/location/${location.slug}/${log.id}`}
           showLabel={isSidebarOpen}
-          onMouseEnter={() => setSelectedLog(log)}
-          onMouseLeave={() => setSelectedLog(null)}
+          onMouseEnter={() => setHighlightedLog(log)}
+          onMouseLeave={() => setHighlightedLog(null)}
         />
       ))}
     </>
