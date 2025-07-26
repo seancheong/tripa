@@ -1,23 +1,23 @@
 'use client';
 
-import { InsertLocation } from '@/db/schema';
+import FormField from '@/components/FormField';
+import { InsertLocation, InsertLocationType } from '@/db/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { MapPinIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { PropsWithChildren, useEffect } from 'react';
-import { FieldError, SubmitHandler, useForm } from 'react-hook-form';
+import { useEffect } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Location } from '../actions/locationAction';
-import { AddLocationFormData } from '../actions/locationAction';
 import LocationSearch, { NominatimResult } from './LocationSearch';
 
 interface LocationFormProps {
   submitLabel: string;
   isFormSubmitting: boolean;
-  defaultValues: AddLocationFormData;
+  defaultValues: InsertLocationType;
   newCoordinates: Pick<Location, 'lat' | 'long'> | null;
   onResultSelected: (result: NominatimResult) => void;
-  submitHandler: SubmitHandler<AddLocationFormData>;
+  submitHandler: SubmitHandler<InsertLocationType>;
 }
 
 export default function LocationForm({
@@ -36,9 +36,10 @@ export default function LocationForm({
     setValue,
     watch,
     formState: { errors },
-  } = useForm<AddLocationFormData>({
+  } = useForm<InsertLocationType>({
     defaultValues,
     resolver: zodResolver(InsertLocation),
+    mode: 'onBlur',
   });
 
   const watchedLat = watch('lat');
@@ -122,24 +123,5 @@ export default function LocationForm({
 
       <LocationSearch onResultSelected={handleResultSelected} />
     </>
-  );
-}
-
-interface FormFieldProps {
-  label: string;
-  error?: FieldError;
-}
-
-function FormField({
-  children,
-  label,
-  error,
-}: PropsWithChildren<FormFieldProps>) {
-  return (
-    <fieldset className="fieldset">
-      <legend className="fieldset-legend">{label}</legend>
-      {children}
-      {error && <p className="label text-error">{error.message}</p>}
-    </fieldset>
   );
 }

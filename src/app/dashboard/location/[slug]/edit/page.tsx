@@ -1,5 +1,5 @@
 import { getLocation } from '@/features/location/actions/locationAction';
-import LocationEditForm from '@/features/location/components/LocationEditForm';
+import LocationEditDetails from '@/features/location/components/LocationEditDetails';
 import { Suspense } from 'react';
 
 export default async function LocationEditPage({
@@ -14,7 +14,7 @@ export default async function LocationEditPage({
     <Suspense
       fallback={<span className="loading loading-spinner loading-xl" />}
     >
-      <LocationEditForm locationData={locationData} />
+      <LocationEditDetails locationData={locationData} />
     </Suspense>
   );
 }

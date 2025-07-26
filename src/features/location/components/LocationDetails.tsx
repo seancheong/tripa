@@ -1,6 +1,7 @@
 'use client';
 
 import Dialog from '@/components/Dialog';
+import { formatDate } from '@/utils/formatDate';
 import { showToast } from '@/utils/showToast';
 import { EllipsisVerticalIcon, MapPinPlusIcon, TrashIcon } from 'lucide-react';
 import Link from 'next/link';
@@ -9,6 +10,8 @@ import { use, useEffect, useState } from 'react';
 
 import { deleteLocation, getLocation } from '../actions/locationAction';
 import { useLocation } from '../contexts/locationContext';
+import { useLocationLog } from '../contexts/locationLogContext';
+import LocationCard from './LocationCard';
 
 interface LocationDetailsProps {
   locationData: ReturnType<typeof getLocation>;
@@ -19,6 +22,7 @@ export default function LocationDetails({
 }: LocationDetailsProps) {
   const location = use(locationData);
   const { setSelectedLocation } = useLocation();
+  const { selectedLog, setSelectedLog } = useLocationLog();
   const router = useRouter();
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -62,7 +66,12 @@ export default function LocationDetails({
         <h2 className="text-xl">Location page: {location.name}</h2>
 
         <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-sm m-1 p-0">
+          <div
+            tabIndex={0}
+            role="button"
+            aria-label={`More actions for location "${location.name}"`}
+            className="btn btn-sm m-1 p-0"
+          >
             <EllipsisVerticalIcon />
           </div>
           <ul
@@ -82,7 +91,27 @@ export default function LocationDetails({
         <p className="text-sm">{location.description}</p>
       )}
 
-      {location.locationLogs.length === 0 && (
+      {location.locationLogs.length > 0 ? (
+        <div className="mt-4 flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden">
+          {location.locationLogs.map((log) => (
+            <LocationCard
+              key={log.id}
+              href={`/dashboard/location/${location.slug}/${log.id}`}
+              title={log.name}
+              description={log.description}
+              isHighlighted={selectedLog?.id === log.id}
+              onMouseEnter={() => setSelectedLog(log)}
+              onMouseLeave={() => setSelectedLog(null)}
+            >
+              <p className="text-sm text-gray-500 italic">
+                {formatDate(log.startedAt)}{' '}
+                {log.startedAt !== log.endedAt &&
+                  `/ ${formatDate(log.endedAt)}`}
+              </p>
+            </LocationCard>
+          ))}
+        </div>
+      ) : (
         <div className="mt-4">
           <p className="text-sm italic">Add a location log to get started </p>
 

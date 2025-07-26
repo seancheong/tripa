@@ -1,26 +1,23 @@
 'use client';
 
+import { InsertLocationType } from '@/db/schema';
 import { showToast } from '@/utils/showToast';
 import { useRouter } from 'next/navigation';
 import { use, useEffect, useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
-import {
-  AddLocationFormData,
-  getLocation,
-  updateLocation,
-} from '../actions/locationAction';
+import { getLocation, updateLocation } from '../actions/locationAction';
 import { useLocation } from '../contexts/locationContext';
 import LocationForm from './LocationForm';
 import { NominatimResult } from './LocationSearch';
 
-interface LocationEditFormProps {
+interface LocationEditDetailsProps {
   locationData: ReturnType<typeof getLocation>;
 }
 
-export default function LocationEditForm({
+export default function LocationEditDetails({
   locationData,
-}: LocationEditFormProps) {
+}: LocationEditDetailsProps) {
   const location = use(locationData);
 
   const router = useRouter();
@@ -47,7 +44,7 @@ export default function LocationEditForm({
     });
   };
 
-  const submitHandler: SubmitHandler<AddLocationFormData> = async (data) => {
+  const submitHandler: SubmitHandler<InsertLocationType> = async (data) => {
     try {
       setFormSubmitting(true);
       await updateLocation(location.slug, data);
