@@ -1,7 +1,11 @@
 'use server';
 
 import db from '@/db';
-import { InsertLocation, location } from '@/db/schema/location';
+import {
+  InsertLocation,
+  InsertLocationType,
+  location,
+} from '@/db/schema/location';
 import { getSession } from '@/utils/auth';
 import { and, eq } from 'drizzle-orm';
 import { customAlphabet } from 'nanoid';
@@ -9,13 +13,6 @@ import slugify from 'slug';
 
 export type Location = Awaited<ReturnType<typeof getLocations>>[number];
 export type NewLocation = Pick<Location, 'lat' | 'long'>;
-
-export type AddLocationFormData = {
-  name: string;
-  description: string | null;
-  lat: number;
-  long: number;
-};
 
 function findLocationBySlug(slug: string) {
   return db.query.location.findFirst({
@@ -37,7 +34,9 @@ export async function getLocation(slug: string) {
   return db.query.location.findFirst({
     where: and(eq(location.userId, userId), eq(location.slug, slug)),
     with: {
-      locationLogs: true,
+      locationLogs: {
+        orderBy: (fields, operator) => operator.desc(fields.startedAt),
+      },
     },
   });
 }
@@ -55,10 +54,15 @@ export async function getLocations() {
 
   return db.query.location.findMany({
     where: eq(location.userId, userId),
+    with: {
+      locationLogs: {
+        orderBy: (fields, operator) => operator.desc(fields.startedAt),
+      },
+    },
   });
 }
 
-export async function addLocation(data: AddLocationFormData) {
+export async function addLocation(data: InsertLocationType) {
   const session = await getSession();
   if (!session) {
     throw new Error('Unauthorized');
@@ -96,7 +100,7 @@ export async function addLocation(data: AddLocationFormData) {
   return created;
 }
 
-export async function updateLocation(slug: string, data: AddLocationFormData) {
+export async function updateLocation(slug: string, data: InsertLocationType) {
   const session = await getSession();
   if (!session) {
     throw new Error('Unauthorized');

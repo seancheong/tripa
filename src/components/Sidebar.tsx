@@ -19,9 +19,10 @@ import SidebarButton from './SidebarButton';
 
 interface SidebarProps {
   locationList: ReactNode;
+  logList: ReactNode;
 }
 
-export default function Sidebar({ locationList }: SidebarProps) {
+export default function Sidebar({ locationList, logList }: SidebarProps) {
   const { isSidebarOpen, toggleSidebar } = useSidebar();
 
   const pathname = usePathname();
@@ -52,7 +53,7 @@ export default function Sidebar({ locationList }: SidebarProps) {
           isLocationPageSelected={isLocationPageSelected}
         />
 
-        {isLocationPageSelected ? null : locationList}
+        {isLocationPageSelected ? logList : locationList}
 
         <div className="divider" />
 

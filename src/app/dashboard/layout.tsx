@@ -3,6 +3,7 @@ import Sidebar from '@/components/Sidebar';
 import { getLocations } from '@/features/location/actions/locationAction';
 import LocationProviderWrapper from '@/features/location/components/LocationProviderWrapper';
 import SidebarLocationList from '@/features/location/components/SidebarLocationList';
+import SidebarLocationLogList from '@/features/location/components/SidebarLocationLogList';
 import { PropsWithChildren, Suspense } from 'react';
 
 import Container from './Container';
@@ -17,6 +18,11 @@ export default async function DashboardLayout({ children }: PropsWithChildren) {
           locationList={
             <Suspense fallback={<LocationListSkeleton />}>
               <SidebarLocationList locationsData={locationsData} />
+            </Suspense>
+          }
+          logList={
+            <Suspense fallback={<LocationListSkeleton />}>
+              <SidebarLocationLogList locationsData={locationsData} />
             </Suspense>
           }
         />

@@ -1,9 +1,7 @@
 'use client';
 
-import {
-  AddLocationFormData,
-  addLocation,
-} from '@/features/location/actions/locationAction';
+import { InsertLocationType } from '@/db/schema';
+import { addLocation } from '@/features/location/actions/locationAction';
 import LocationForm from '@/features/location/components/LocationForm';
 import { NominatimResult } from '@/features/location/components/LocationSearch';
 import { useLocation } from '@/features/location/contexts/locationContext';
@@ -25,7 +23,7 @@ export default function LocationAddPage() {
     });
   };
 
-  const submitHandler: SubmitHandler<AddLocationFormData> = async (data) => {
+  const submitHandler: SubmitHandler<InsertLocationType> = async (data) => {
     try {
       setFormSubmitting(true);
       await addLocation(data);
