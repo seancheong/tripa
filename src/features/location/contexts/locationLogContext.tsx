@@ -8,20 +8,29 @@ import {
 import type { LocationLog } from '../actions/locationLogAction';
 
 interface LocationLogContextType {
+  highlightedLog: LocationLog | null;
   selectedLog: LocationLog | null;
+  setHighlightedLog: (log: LocationLog | null) => void;
   setSelectedLog: (log: LocationLog | null) => void;
 }
 
 const LocationLogContext = createContext<LocationLogContextType>({
+  highlightedLog: null,
   selectedLog: null,
+  setHighlightedLog: () => {},
   setSelectedLog: () => {},
 });
 
 export const LocationLogProvider = ({ children }: PropsWithChildren) => {
+  const [highlightedLog, setHighlightedLog] = useState<LocationLog | null>(
+    null,
+  );
   const [selectedLog, setSelectedLog] = useState<LocationLog | null>(null);
 
   return (
-    <LocationLogContext.Provider value={{ selectedLog, setSelectedLog }}>
+    <LocationLogContext.Provider
+      value={{ highlightedLog, selectedLog, setHighlightedLog, setSelectedLog }}
+    >
       {children}
     </LocationLogContext.Provider>
   );
