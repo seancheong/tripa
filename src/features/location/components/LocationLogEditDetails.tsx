@@ -29,7 +29,7 @@ export default function LocationLogEditDetails({
   const router = useRouter();
 
   const { setSelectedLocation } = useLocation();
-  const { selectedLog, setSelectedLog } = useLocationLog();
+  const { setSelectedLog } = useLocationLog();
 
   const [isFormSubmitting, setFormSubmitting] = useState(false);
 
@@ -40,16 +40,16 @@ export default function LocationLogEditDetails({
     return () => setSelectedLog(null);
   }, [location, log, setSelectedLocation, setSelectedLog]);
 
-  if (!location || !selectedLog) {
+  if (!location || !log) {
     return <div className="text-error">Log not found</div>;
   }
 
   const submitHandler: SubmitHandler<InsertLocationLogType> = async (data) => {
     try {
       setFormSubmitting(true);
-      await updateLocationLog(data, selectedLog.id);
+      await updateLocationLog(data, log.id);
       showToast({
-        message: `Location Log "${selectedLog.name}" updated successfully.`,
+        message: `Location Log "${log.name}" updated successfully.`,
       });
       router.push(`/dashboard/location/${location.slug}`);
     } catch (error) {
@@ -67,10 +67,10 @@ export default function LocationLogEditDetails({
       submitLabel="Update"
       isFormSubmitting={isFormSubmitting}
       defaultValues={{
-        name: selectedLog.name,
-        description: selectedLog.description,
-        startedAt: selectedLog.startedAt,
-        endedAt: selectedLog.endedAt,
+        name: log.name,
+        description: log.description,
+        startedAt: log.startedAt,
+        endedAt: log.endedAt,
         lat: location.lat,
         long: location.long,
       }}
