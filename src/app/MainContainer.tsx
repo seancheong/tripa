@@ -16,7 +16,10 @@ export default function MainContainer({ children }: PropsWithChildren) {
   }
 
   return (
-    <div data-theme={theme} className="flex min-h-screen flex-col">
+    <div
+      data-theme={theme}
+      className="flex min-h-screen flex-col contain-content"
+    >
       {children}
     </div>
   );

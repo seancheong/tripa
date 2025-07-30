@@ -19,7 +19,7 @@ export default function LocationList({ locationsData }: LocationListProps) {
     useLocation();
 
   return locations.length > 0 ? (
-    <div className="mt-4 flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {locations.map((location) => (
         <LocationCard
           key={location.id}

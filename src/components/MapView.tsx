@@ -140,7 +140,7 @@ export default function MapView({ locationsData }: MapViewProps) {
                   onMouseLeave={() => setHighlightedLocation(null)}
                 >
                   <MapPinIcon
-                    className={`size-10 ${selectedLocation?.id === id || highlightedLocation?.id === id ? 'text-accent' : 'text-secondary'}`}
+                    className={`size-10 ${selectedLocation?.id === id || highlightedLocation?.id === id ? 'text-primary' : 'text-muted-foreground'}`}
                   />
                 </div>
               </Marker>

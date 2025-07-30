@@ -42,7 +42,6 @@ export default function SidebarLocationLogList({
             />
           }
           href={`/dashboard/location/${location.slug}/${log.id}`}
-          showLabel={isSidebarOpen}
           onMouseEnter={() => setHighlightedLog(log)}
           onMouseLeave={() => setHighlightedLog(null)}
         />

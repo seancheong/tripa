@@ -1,23 +1,22 @@
 'use client';
 
 import { useAuth } from '@/contexts/authContext';
-import { GithubIcon } from 'lucide-react';
+import { GithubIcon, Loader2Icon } from 'lucide-react';
+
+import { Button } from './ui/button';
 
 export default function GithubSignInButton() {
   const { githubSignIn, loading } = useAuth();
 
   return (
-    <button
+    <Button
+      variant="secondary"
       disabled={loading}
-      className="btn btn-accent"
+      className="w-full"
       onClick={githubSignIn}
     >
-      Sign In With Github{' '}
-      {loading ? (
-        <span className="loading loading-spinner loading-md" />
-      ) : (
-        <GithubIcon />
-      )}
-    </button>
+      {loading ? <Loader2Icon className="animate-spin" /> : <GithubIcon />}
+      Sign In With Github
+    </Button>
   );
 }

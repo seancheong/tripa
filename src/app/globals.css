@@ -1,9 +1,7 @@
 @import 'tailwindcss';
-@plugin "daisyui";
+@import 'tw-animate-css';
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
+@custom-variant dark (&:is(.dark *));
 
 .maplibregl-popup {
   .maplibregl-popup-close-button {
@@ -45,4 +43,216 @@ html.dark {
       }
     }
   }
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --radius-md: calc(var(--radius) - 2px);
+
+  --radius-lg: var(--radius);
+
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: hsl(var(--background));
+
+  --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-primary: hsl(var(--primary));
+
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-success: hsl(var(--success));
+
+  --color-success-foreground: hsl(var(--success-foreground));
+
+  --color-error: hsl(var(--error));
+
+  --color-error-foreground: hsl(var(--error-foreground));
+
+  --color-border: hsl(var(--border));
+
+  --color-input: hsl(var(--input));
+
+  --color-ring: hsl(var(--ring));
+
+  --color-chart-1: hsl(var(--chart-1));
+
+  --color-chart-2: hsl(var(--chart-2));
+
+  --color-chart-3: hsl(var(--chart-3));
+
+  --color-chart-4: hsl(var(--chart-4));
+
+  --color-chart-5: hsl(var(--chart-5));
+
+  --color-sidebar: hsl(var(--sidebar));
+
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+
+  --color-sidebar-border: hsl(var(--sidebar-border));
+
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+}
+
+:root {
+  --background: 0 0% 98%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+
+  /* Primary - McLaren Orange */
+  --primary: 24 100% 50%;
+  --primary-foreground: 0 0% 100%;
+
+  /* Secondary - Cool Gray */
+  --secondary: 210 40% 92%;
+  --secondary-foreground: 222.2 84% 4.9%;
+
+  /* Tertiary - Warm Gray */
+  --tertiary: 30 5% 85%;
+  --tertiary-foreground: 222.2 84% 4.9%;
+
+  /* Accent - Complementary Blue */
+  --accent: 210 100% 56%;
+  --accent-foreground: 0 0% 100%;
+
+  /* Success - Green */
+  --success: 142 76% 36%;
+  --success-foreground: 0 0% 100%;
+
+  /* Warning - Amber */
+  --warning: 45 93% 47%;
+  --warning-foreground: 0 0% 100%;
+
+  /* Error - Red */
+  --error: 0 84% 60%;
+  --error-foreground: 0 0% 100%;
+
+  /* Info - Cyan */
+  --info: 188 94% 42%;
+  --info-foreground: 0 0% 100%;
+
+  /* Muted colors */
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+
+  /* Border and input */
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 24 100% 50%;
+  --radius: 0.75rem;
+  --sidebar: 0 0% 98%;
+  --sidebar-foreground: 222.2 84% 4.9%;
+  --sidebar-primary: 24 100% 50%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 210 100% 56%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-border: 214.3 31.8% 91.4%;
+  --sidebar-ring: 24 100% 50%;
+}
+
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+
+  /* Primary - McLaren Orange (slightly brighter for dark mode) */
+  --primary: 24 100% 55%;
+  --primary-foreground: 222.2 84% 4.9%;
+
+  /* Secondary - Dark Gray */
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+
+  /* Tertiary - Darker Gray */
+  --tertiary: 217.2 32.6% 25%;
+  --tertiary-foreground: 210 40% 98%;
+
+  /* Accent - Complementary Blue (adjusted for dark) */
+  --accent: 210 100% 65%;
+  --accent-foreground: 222.2 84% 4.9%;
+
+  /* Success - Green (adjusted for dark) */
+  --success: 142 70% 45%;
+  --success-foreground: 222.2 84% 4.9%;
+
+  /* Warning - Amber (adjusted for dark) */
+  --warning: 45 93% 58%;
+  --warning-foreground: 222.2 84% 4.9%;
+
+  /* Error - Red (adjusted for dark) */
+  --error: 0 84% 65%;
+  --error-foreground: 222.2 84% 4.9%;
+
+  /* Info - Cyan (adjusted for dark) */
+  --info: 188 94% 52%;
+  --info-foreground: 222.2 84% 4.9%;
+
+  /* Muted colors */
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+
+  /* Border and input */
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 24 100% 55%;
+  --sidebar: 222.2 84% 4.9%;
+  --sidebar-foreground: 210 40% 98%;
+  --sidebar-primary: 24 100% 55%;
+  --sidebar-primary-foreground: 222.2 84% 4.9%;
+  --sidebar-accent: 210 100% 65%;
+  --sidebar-accent-foreground: 222.2 84% 4.9%;
+  --sidebar-border: 217.2 32.6% 17.5%;
+  --sidebar-ring: 217.2 32.6% 17.5%;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Utility classes */
+.text-gradient-orange {
+  background: linear-gradient(135deg, #ff8c00 0%, #ff6b00 50%, #e55100 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

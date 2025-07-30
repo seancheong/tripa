@@ -1,4 +1,5 @@
-import NavBar from '@/components/NavBar';
+import Header from '@/components/Header';
+import { Toaster } from '@/components/ui/sonner';
 import '@/utils/env';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
@@ -35,9 +36,9 @@ export default function RootLayout({
       >
         <ClientProviders>
           <MainContainer>
-            <NavBar />
+            <Header />
             <main className="flex flex-1 flex-col">{children}</main>
-            <div className="toast z-50" id="daisy-toast" />
+            <Toaster richColors position="top-center" />
           </MainContainer>
         </ClientProviders>
       </body>
