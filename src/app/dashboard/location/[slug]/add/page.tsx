@@ -1,5 +1,6 @@
 import { getLocation } from '@/features/location/actions/locationAction';
 import LocationAddLogDetails from '@/features/location/components/LocationAddLogDetails';
+import { Loader2Icon } from 'lucide-react';
 import { Suspense } from 'react';
 
 export default async function LocationAddPage({
@@ -19,9 +20,7 @@ export default async function LocationAddPage({
     <>
       <h2>Add new log for {location.name}</h2>
 
-      <Suspense
-        fallback={<span className="loading loading-spinner loading-xl" />}
-      >
+      <Suspense fallback={<Loader2Icon className="animate-spin" />}>
         <LocationAddLogDetails locationData={locationData} />
       </Suspense>
     </>

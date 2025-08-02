@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { getLocations } from '@/features/location/actions/locationAction';
 import LocationList from '@/features/location/components/LocationList';
-import { PlusIcon } from 'lucide-react';
+import { Loader2Icon, PlusIcon } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
@@ -29,9 +29,7 @@ export default function DashboardPage() {
         </Link>
       </div>
 
-      <Suspense
-        fallback={<span className="loading loading-spinner loading-xl" />}
-      >
+      <Suspense fallback={<Loader2Icon className="animate-spin" />}>
         <LocationList locationsData={locationsData} />
       </Suspense>
     </>

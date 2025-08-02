@@ -1,10 +1,23 @@
 'use client';
 
-import FormField from '@/components/FormField';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { InsertLocation, InsertLocationType } from '@/db/schema';
+import MapPinIcon from '@heroicons/react/24/solid/MapPinIcon';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { MapPinIcon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { Loader2Icon, NavigationIcon } from 'lucide-react';
+import Link from 'next/link';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -28,19 +41,13 @@ export default function LocationForm({
   onResultSelected,
   submitHandler,
 }: LocationFormProps) {
-  const router = useRouter();
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<InsertLocationType>({
+  const form = useForm<InsertLocationType>({
     defaultValues,
     resolver: zodResolver(InsertLocation),
     mode: 'onBlur',
   });
+
+  const { control, handleSubmit, setValue, watch } = form;
 
   const watchedLat = watch('lat');
   const watchedLong = watch('long');
@@ -64,64 +71,97 @@ export default function LocationForm({
   }, [newCoordinates, setValue]);
 
   return (
-    <>
-      <form
-        className="flex flex-col gap-2"
-        onSubmit={handleSubmit(submitHandler)}
-      >
-        <FormField label="Name" error={errors.name}>
-          <input
-            {...register('name')}
-            className={`input w-full ${errors.name && 'input-error'}`}
-          />
-        </FormField>
+    <Form {...form}>
+      <form onSubmit={handleSubmit(submitHandler)} className="space-y-6 p-4">
+        <FormField
+          control={control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Location Name *</FormLabel>
+              <FormControl>
+                <Input placeholder="e.g. Tokyo" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        <FormField label="Description" error={errors.description}>
-          <textarea
-            {...register('description')}
-            rows={5}
-            className={`textarea w-full ${errors.description && 'textarea-error'}`}
-          />
-        </FormField>
+        <FormField
+          control={control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Tell us about this place..."
+                  rows={5}
+                  {...field}
+                  value={field.value ?? ''}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        <p className="text-xs text-gray-400">{`Current coordinates: ${formatNumber(watchedLat)} ${formatNumber(watchedLong)}`}</p>
-        <p>To set the coordinates:</p>
-        <ul className="ml-4 list-disc text-sm">
-          <li>
-            Drag the <MapPinIcon className="text-info inline-flex size-4" />{' '}
-            marker to your desired location.
-          </li>
-          <li>Double click on your desired location on the map.</li>
-          <li>Search for a location below.</li>
-        </ul>
+        <div className="space-y-3">
+          <Label className="text-sm font-medium">Current Coordinates</Label>
+          <div className="bg-muted/50 border-border flex items-center gap-2 rounded-lg border p-3">
+            <NavigationIcon size={16} className="text-primary" />
+            <span className="font-mono text-sm">
+              {formatNumber(watchedLat)}, {formatNumber(watchedLong)}
+            </span>
+          </div>
+        </div>
 
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            disabled={isFormSubmitting}
-            className="btn btn-outline min-w-20"
-            onClick={() => router.back()}
-          >
-            Cancel
-          </button>
+        <Alert>
+          <AlertTitle>Set Location Coordinates</AlertTitle>
+          <AlertDescription>
+            <ul className="list-inside list-disc text-sm">
+              <li className="hidden lg:list-item">
+                Drag the{' '}
+                <MapPinIcon className="text-accent inline-flex size-4" /> marker
+                to your desired location.
+              </li>
+              <li className="hidden lg:list-item">
+                Double click on your desired location on the map.
+              </li>
+              <li>
+                Search for a location using the &quot;location search&quot;
+                below.
+              </li>
+            </ul>
+          </AlertDescription>
+        </Alert>
 
-          <button
+        <div className="flex flex-row justify-between gap-3 lg:justify-end">
+          <Link href="/dashboard" className="w-1/2 lg:w-20" passHref>
+            <Button
+              type="button"
+              variant="outline"
+              className="border-border hover:bg-muted w-full bg-transparent"
+              disabled={isFormSubmitting}
+            >
+              Cancel
+            </Button>
+          </Link>
+          <Button
             type="submit"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground w-1/2 lg:w-20"
             disabled={isFormSubmitting}
-            className="btn btn-primary min-w-20"
           >
             {isFormSubmitting ? (
-              <span className="loading loading-spinner loading-sm"></span>
+              <Loader2Icon className="animate-spin" />
             ) : (
               submitLabel
             )}
-          </button>
+          </Button>
         </div>
       </form>
 
-      <div className="divider" />
-
       <LocationSearch onResultSelected={handleResultSelected} />
-    </>
+    </Form>
   );
 }

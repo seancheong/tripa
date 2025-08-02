@@ -10,7 +10,6 @@ import {
   MapIcon,
   MapPinPlusIcon,
 } from 'lucide-react';
-import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
 
 import SidebarButton from './SidebarButton';
@@ -33,17 +32,15 @@ interface SidebarProps {
 export default function AppSidebar({ locationList, logList }: SidebarProps) {
   const { isSidebarOpen } = useSidebar();
 
-  const pathname = usePathname();
-  const isLocationPageSelected = pathname.startsWith('/dashboard/location/');
-
   // Prevent sidebar from rendering if it is null, to prevent flickering
   if (isSidebarOpen === null) return null;
 
   return (
     <Sidebar collapsible="icon" className="relative h-full">
       <SidebarContent>
-        <SidebarTopSection isLocationPageSelected={isLocationPageSelected} />
-        {isLocationPageSelected ? logList : locationList}
+        <SidebarTopSection isLocationPageSelected={false} />
+        {locationList}
+        {logList}
       </SidebarContent>
 
       <SidebarSeparator className="bg-border m-0" />

@@ -1,5 +1,6 @@
 import { getLocation } from '@/features/location/actions/locationAction';
 import LocationDetails from '@/features/location/components/LocationDetails';
+import { Loader2Icon } from 'lucide-react';
 import { Suspense } from 'react';
 
 export default async function LocationSlugPage({
@@ -11,9 +12,7 @@ export default async function LocationSlugPage({
   const locationData = getLocation(slug);
 
   return (
-    <Suspense
-      fallback={<span className="loading loading-spinner loading-xl" />}
-    >
+    <Suspense fallback={<Loader2Icon className="animate-spin" />}>
       <LocationDetails locationData={locationData} />
     </Suspense>
   );

@@ -8,8 +8,6 @@ import SidebarLocationList from '@/features/location/components/SidebarLocationL
 import SidebarLocationLogList from '@/features/location/components/SidebarLocationLogList';
 import { PropsWithChildren, Suspense } from 'react';
 
-import Container from './Container';
-
 export default async function DashboardLayout({ children }: PropsWithChildren) {
   const locationsData = getLocations();
 
@@ -30,20 +28,18 @@ export default async function DashboardLayout({ children }: PropsWithChildren) {
             }
           />
 
-          <div className="flex-1 p-4">
-            <Container>
-              <CustomSidebarTrigger />
+          <div className="flex flex-1 flex-col overflow-y-auto p-4">
+            <CustomSidebarTrigger />
 
-              <div className="relative flex flex-1 flex-col gap-4">
-                <div className="h-full lg:h-1/2">{children}</div>
+            <div className="relative flex flex-1 flex-col gap-4">
+              <div className="h-full overflow-y-auto lg:h-1/2">{children}</div>
 
-                <div className="hidden lg:block lg:h-1/2">
-                  <Suspense>
-                    <MapView locationsData={locationsData} />
-                  </Suspense>
-                </div>
+              <div className="hidden lg:block lg:h-1/2">
+                <Suspense>
+                  <MapView locationsData={locationsData} />
+                </Suspense>
               </div>
-            </Container>
+            </div>
           </div>
         </div>
       </LocationProviderWrapper>

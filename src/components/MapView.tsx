@@ -100,7 +100,7 @@ export default function MapView({ locationsData }: MapViewProps) {
             className="tooltip tooltip-top hover:cursor-pointer"
             data-tip="Drag to your desired location"
           >
-            <MapPinIcon className="text-info size-12" />
+            <MapPinIcon className="text-accent size-12" />
           </div>
         </Marker>
       )}
@@ -118,7 +118,7 @@ export default function MapView({ locationsData }: MapViewProps) {
             className="tooltip tooltip-top hover:cursor-pointer"
             data-tip="Drag to your desired location"
           >
-            <MapPinIcon className="text-info size-12" />
+            <MapPinIcon className="text-accent size-12" />
           </div>
         </Marker>
       )}
@@ -140,7 +140,7 @@ export default function MapView({ locationsData }: MapViewProps) {
                   onMouseLeave={() => setHighlightedLocation(null)}
                 >
                   <MapPinIcon
-                    className={`size-10 ${selectedLocation?.id === id || highlightedLocation?.id === id ? 'text-primary' : 'text-muted-foreground'}`}
+                    className={`size-10 ${selectedLocation?.id === id || highlightedLocation?.id === id ? 'text-primary' : 'text-primary/50'}`}
                   />
                 </div>
               </Marker>
