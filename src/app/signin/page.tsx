@@ -1,4 +1,5 @@
 import GithubSignInButton from '@/components/GithubSignInButton';
+import GoogleSignInButton from '@/components/GoogleSignInButton';
 import { Button } from '@/components/ui/button';
 import { getSession } from '@/utils/auth';
 import { ArrowLeftIcon } from 'lucide-react';
@@ -22,7 +23,8 @@ export default async function SignInPage() {
           </p>
         </div>
 
-        <div className="dark:border-border/50 dark:bg-card/80 rounded-2xl border border-gray-200/50 bg-white/80 p-8 shadow-xl backdrop-blur-sm">
+        <div className="dark:border-border/50 dark:bg-card/80 flex flex-col gap-6 rounded-2xl border border-gray-200/50 bg-white/80 p-8 shadow-xl backdrop-blur-sm">
+          <GoogleSignInButton />
           <GithubSignInButton />
         </div>
 

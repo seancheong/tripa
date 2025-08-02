@@ -29,8 +29,11 @@ TURSO_AUTH_TOKEN=            # Auth token for your Turso database
 BETTER_AUTH_URL=             # Base URL for BetterAuth service
 BETTER_AUTH_SECRET=          # Secret key for BetterAuth
 
-GITHUB_CLIENT_ID=            # GitHub client ID for OAuth
-GITHUB_CLIENT_SECRET=        # GitHub client secret for OAuth
+GITHUB_CLIENT_ID=            # GitHub client ID
+GITHUB_CLIENT_SECRET=        # GitHub client secret
+
+GOOGLE_CLIENT_ID=            # Google client ID
+GOOGLE_CLIENT_SECRET=        # Google client secret
 ```
 
 ## Getting Started

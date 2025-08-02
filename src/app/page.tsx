@@ -19,7 +19,7 @@ export default function HomePage() {
         </h1>
 
         <p className="text-muted-foreground mx-auto max-w-2xl text-lg leading-relaxed sm:text-xl">
-          Keep track of your travels and adventures with Tripa. Add locations,
+          Keep track of your travels and adventures with Tripa. Add locations
           and notes to create a personalized travel journal that tells your
           story.
         </p>
