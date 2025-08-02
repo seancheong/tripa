@@ -1,6 +1,7 @@
 'use server';
 
 import db from '@/db';
+import { locationLog } from '@/db/schema';
 import {
   InsertLocation,
   InsertLocationType,
@@ -129,7 +130,7 @@ export async function updateLocation(slug: string, data: InsertLocationType) {
   return updated[0];
 }
 
-export async function deleteLocation(slug: string) {
+export async function deleteLocation(locationId: number) {
   const session = await getSession();
   if (!session) {
     throw new Error('Unauthorized');
@@ -140,9 +141,11 @@ export async function deleteLocation(slug: string) {
     throw new Error('Invalid user ID');
   }
 
+  await db.delete(locationLog).where(eq(locationLog.locationId, locationId));
+
   const deleted = await db
     .delete(location)
-    .where(and(eq(location.slug, slug), eq(location.userId, userId)))
+    .where(and(eq(location.id, locationId), eq(location.userId, userId)))
     .returning();
 
   if (deleted.length === 0) {

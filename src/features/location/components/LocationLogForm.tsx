@@ -1,10 +1,28 @@
-import FormField from '@/components/FormField';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { Textarea } from '@/components/ui/textarea';
 import {
   InsertLocationLog,
   InsertLocationLogType,
 } from '@/db/schema/locationLog';
+import { cn } from '@/lib/utils';
 import { formatDate } from '@/utils/formatDate';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { CalendarIcon, Loader2Icon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -23,84 +41,161 @@ export default function LocationLogForm({
 }: LocationLogFormProps) {
   const router = useRouter();
 
-  const {
-    register,
-    watch,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<InsertLocationLogType>({
+  const form = useForm<InsertLocationLogType>({
     defaultValues,
     resolver: zodResolver(InsertLocationLog),
     mode: 'onBlur',
   });
 
+  const { control, watch, handleSubmit } = form;
+
   const watchedStartedAt = watch('startedAt');
-  const watchedEndedAt = watch('endedAt');
 
   return (
-    <form
-      className="flex flex-col gap-2"
-      onSubmit={handleSubmit(submitHandler)}
-    >
-      <FormField label="Name" error={errors.name}>
-        <input
-          {...register('name')}
-          className={`input w-full ${errors.name && 'input-error'}`}
-        />
-      </FormField>
-
-      <FormField label="Description" error={errors.description}>
-        <textarea
-          {...register('description')}
-          rows={5}
-          className={`textarea w-full ${errors.description && 'textarea-error'}`}
-        />
-      </FormField>
-
-      <FormField label="Started At" error={errors.startedAt}>
-        <input
-          {...register('startedAt', {
-            setValueAs: (value) => new Date(value).getTime(),
-          })}
-          type="date"
-          value={formatDate(watchedStartedAt)}
-          className={`input w-full ${errors.startedAt && 'input-error'}`}
-        />
-      </FormField>
-
-      <FormField label="Ended At" error={errors.endedAt}>
-        <input
-          {...register('endedAt', {
-            setValueAs: (value) => new Date(value).getTime(),
-          })}
-          type="date"
-          value={formatDate(watchedEndedAt)}
-          className={`input w-full ${errors.endedAt && 'input-error'}`}
-        />
-      </FormField>
-
-      <div className="flex justify-end gap-2">
-        <button
-          type="button"
-          disabled={isFormSubmitting}
-          className="btn btn-outline min-w-20"
-          onClick={() => router.back()}
-        >
-          Cancel
-        </button>
-
-        <button
-          type="submit"
-          disabled={isFormSubmitting}
-          className="btn btn-primary min-w-20"
-        >
-          {isFormSubmitting ? (
-            <span className="loading loading-spinner loading-sm"></span>
-          ) : (
-            submitLabel
+    <Form {...form}>
+      <form onSubmit={handleSubmit(submitHandler)} className="space-y-6">
+        <FormField
+          control={control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Log Name *</FormLabel>
+              <FormControl>
+                <Input placeholder="e.g. Tokyo Skytree" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
-        </button>
-      </div>
-    </form>
+        />
+
+        <FormField
+          control={control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  rows={5}
+                  {...field}
+                  placeholder="Tell us more about the experience..."
+                  value={field.value ?? ''}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={control}
+          name="startedAt"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Started At *</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={'outline'}
+                      className={cn(
+                        'pl-3 text-left font-normal',
+                        !field.value && 'text-muted-foreground',
+                      )}
+                    >
+                      {field.value ? (
+                        formatDate(field.value)
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={new Date(field.value)}
+                    onSelect={(date) => {
+                      const timestamp =
+                        date instanceof Date ? date.getTime() : date;
+                      field.onChange(timestamp);
+                    }}
+                    captionLayout="dropdown"
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={control}
+          name="endedAt"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Ended At *</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={'outline'}
+                      className={cn(
+                        'pl-3 text-left font-normal',
+                        !field.value && 'text-muted-foreground',
+                      )}
+                    >
+                      {field.value ? (
+                        formatDate(field.value)
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={new Date(field.value)}
+                    onSelect={(date) => {
+                      const timestamp =
+                        date instanceof Date ? date.getTime() : date;
+                      field.onChange(timestamp);
+                    }}
+                    disabled={(date) => date < new Date(watchedStartedAt)}
+                    captionLayout="dropdown"
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="flex flex-row justify-between gap-3 lg:justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            className="border-border hover:bg-muted w-1/2 bg-transparent lg:w-20"
+            onClick={() => router.back()}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground w-1/2 lg:w-20"
+            disabled={isFormSubmitting}
+          >
+            {isFormSubmitting ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              submitLabel
+            )}
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }

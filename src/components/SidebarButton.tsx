@@ -1,34 +1,37 @@
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { HTMLAttributes, ReactNode } from 'react';
 
-interface SidebarButtonProps extends HTMLAttributes<HTMLDivElement> {
-  showLabel: boolean;
+import { SidebarMenuButton, SidebarMenuItem } from './ui/sidebar';
+
+interface SidebarButtonProps extends HTMLAttributes<HTMLLIElement> {
   label: string;
   icon: ReactNode;
   href: string;
 }
 
 export default function SidebarButton({
-  showLabel,
   label,
   icon,
   href,
   ...props
 }: SidebarButtonProps) {
+  const pathname = usePathname();
+  const isActive = pathname === href;
+
   return (
-    <div
-      {...props}
-      className={`${showLabel ? '' : 'tooltip'} tooltip-right`}
-      data-tip={showLabel ? undefined : label}
-    >
-      <Link
-        aria-label={label}
-        href={href}
-        className={`btn w-full ${showLabel ? 'justify-start' : 'justify-center'}`}
+    <SidebarMenuItem {...props}>
+      <SidebarMenuButton
+        isActive={isActive}
+        tooltip={label}
+        asChild
+        className="text-muted-foreground"
       >
-        {icon}
-        {showLabel && label}
-      </Link>
-    </div>
+        <Link aria-label={label} href={href}>
+          {icon}
+          <span className={isActive ? 'text-foreground' : ''}>{label}</span>
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
   );
 }

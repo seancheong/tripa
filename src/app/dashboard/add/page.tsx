@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { InsertLocationType } from '@/db/schema';
 import { addLocation } from '@/features/location/actions/locationAction';
 import LocationForm from '@/features/location/components/LocationForm';
@@ -7,6 +8,8 @@ import { NominatimResult } from '@/features/location/components/LocationSearch';
 import { useLocation } from '@/features/location/contexts/locationContext';
 import { KUALA_LUMPUR } from '@/utils/constants';
 import { showToast } from '@/utils/showToast';
+import { ArrowLeftIcon } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
@@ -49,15 +52,19 @@ export default function LocationAddPage() {
   }, [setNewLocation]);
 
   return (
-    <div className="container mx-auto mt-4 max-w-md p-4">
-      <div className="my-4">
-        <h1 className="text-lg">Add Location</h1>
-
-        <p className="text-sm">
-          A location is a place you have traveled or will travel to. It can be a
-          city, country, state or point of interest. You can add specific times
-          you visited this location after adding it.
-        </p>
+    <div className="flex flex-col gap-8">
+      <div className="flex items-center gap-4">
+        <Link href="/dashboard" passHref>
+          <Button variant="ghost" size="sm" className="h-10 w-10 p-0">
+            <ArrowLeftIcon size={16} />
+          </Button>
+        </Link>
+        <div>
+          <h1 className="text-2xl font-bold">Add Location</h1>
+          <p className="text-muted-foreground text-sm">
+            Create a new destination for your travel journal
+          </p>
+        </div>
       </div>
 
       <LocationForm

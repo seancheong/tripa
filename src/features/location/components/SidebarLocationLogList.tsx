@@ -1,8 +1,14 @@
 'use client';
 
 import SidebarButton from '@/components/SidebarButton';
+import {
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+} from '@/components/ui/sidebar';
 import { useSidebar } from '@/contexts/sidebarContext';
-import { MapPinIcon } from 'lucide-react';
+import { NotepadTextIcon } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { use } from 'react';
 
@@ -30,23 +36,26 @@ export default function SidebarLocationLogList({
     return null;
 
   return (
-    <>
-      <div className="divider" />
-      {location.locationLogs.map((log) => (
-        <SidebarButton
-          key={log.id}
-          label={log.name}
-          icon={
-            <MapPinIcon
-              className={`size-5 ${selectedLog?.id === log.id || highlightedLog?.id === log.id ? 'text-accent' : ''}`}
+    <SidebarGroup>
+      <SidebarGroupLabel>Log List</SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {location.locationLogs.map((log) => (
+            <SidebarButton
+              key={log.id}
+              label={log.name}
+              icon={
+                <NotepadTextIcon
+                  className={`size-5 ${selectedLog?.id === log.id || highlightedLog?.id === log.id ? 'text-primary/50' : ''}`}
+                />
+              }
+              href={`/dashboard/location/${location.slug}/${log.id}`}
+              onMouseEnter={() => setHighlightedLog(log)}
+              onMouseLeave={() => setHighlightedLog(null)}
             />
-          }
-          href={`/dashboard/location/${location.slug}/${log.id}`}
-          showLabel={isSidebarOpen}
-          onMouseEnter={() => setHighlightedLog(log)}
-          onMouseLeave={() => setHighlightedLog(null)}
-        />
-      ))}
-    </>
+          ))}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
   );
 }

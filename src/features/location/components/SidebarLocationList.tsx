@@ -1,5 +1,11 @@
 'use client';
 
+import {
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+} from '@/components/ui/sidebar';
 import { useSidebar } from '@/contexts/sidebarContext';
 import { getLocations } from '@/features/location/actions/locationAction';
 import MapPinIcon from '@heroicons/react/24/solid/MapPinIcon';
@@ -24,23 +30,26 @@ export default function SidebarLocationList({
   if (isSidebarOpen === null || locations.length === 0) return null;
 
   return (
-    <>
-      <div className="divider" />
-      {locations.map((location) => (
-        <SidebarButton
-          key={location.id}
-          label={location.name}
-          icon={
-            <MapPinIcon
-              className={`size-5 ${selectedLocation?.id === location.id || highlightedLocation?.id === location.id ? 'text-accent' : ''}`}
+    <SidebarGroup>
+      <SidebarGroupLabel>Location List</SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {locations.map((location) => (
+            <SidebarButton
+              key={location.id}
+              label={location.name}
+              icon={
+                <MapPinIcon
+                  className={`size-5 ${selectedLocation?.id === location.id || highlightedLocation?.id === location.id ? 'text-primary' : ''}`}
+                />
+              }
+              href={`/dashboard/location/${location.slug}`}
+              onMouseEnter={() => setHighlightedLocation(location)}
+              onMouseLeave={() => setHighlightedLocation(null)}
             />
-          }
-          href={`/dashboard/location/${location.slug}`}
-          showLabel={isSidebarOpen}
-          onMouseEnter={() => setHighlightedLocation(location)}
-          onMouseLeave={() => setHighlightedLocation(null)}
-        />
-      ))}
-    </>
+          ))}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
   );
 }

@@ -1,4 +1,5 @@
-import NavBar from '@/components/NavBar';
+import Header from '@/components/Header';
+import { Toaster } from '@/components/ui/sonner';
 import '@/utils/env';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
@@ -18,9 +19,39 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  authors: { name: 'Sean Cheong Zhen Xiong' },
   title: 'Tripa',
   description: 'Keep track of your travels and adventures with Tripa',
+  authors: [{ name: 'Sean Cheong Zhen Xiong' }],
+  generator: 'Next.js',
+  applicationName: 'Tripa',
+  keywords: ['travel', 'log', 'map', 'location', 'Tripa'],
+  creator: 'Sean Cheong Zhen Xiong',
+  publisher: 'Tripa',
+  metadataBase: new URL('https://tripa-six.vercel.app'),
+  openGraph: {
+    title: 'Tripa',
+    description: 'Keep track of your travels and adventures with Tripa',
+    url: 'https://tripa-six.vercel.app',
+    siteName: 'Tripa',
+    images: [
+      {
+        url: '/og-home.png',
+        width: 1200,
+        height: 630,
+        alt: 'Tripa Open Graph Image',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Tripa',
+    description: 'Keep track of your travels and adventures with Tripa',
+    site: '@tripaapp',
+    creator: '@seancheong',
+    images: ['/og-home.png'],
+  },
 };
 
 export default function RootLayout({
@@ -35,9 +66,9 @@ export default function RootLayout({
       >
         <ClientProviders>
           <MainContainer>
-            <NavBar />
+            <Header />
             <main className="flex flex-1 flex-col">{children}</main>
-            <div className="toast z-50" id="daisy-toast" />
+            <Toaster richColors position="top-center" />
           </MainContainer>
         </ClientProviders>
       </body>

@@ -1,6 +1,17 @@
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import { showToast } from '@/utils/showToast';
+import MapPinIcon from '@heroicons/react/24/solid/MapPinIcon';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SearchIcon } from 'lucide-react';
+import { Loader2Icon } from 'lucide-react';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import z from 'zod';
@@ -38,16 +49,18 @@ export default function LocationSearch({
   const [hasSearched, setHasSearched] = useState(false);
   const [locationResults, setLocationResults] = useState<NominatimResult[]>([]);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LocationSearchFormData>({
+  const form = useForm<LocationSearchFormData>({
     defaultValues: {
       q: '',
     },
     resolver: zodResolver(locationSearchSchema),
   });
+
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = form;
 
   const submitHandler: SubmitHandler<LocationSearchFormData> = async (data) => {
     try {
@@ -72,56 +85,71 @@ export default function LocationSearch({
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <form onSubmit={handleSubmit(submitHandler)}>
-        <div className="join mt-4 w-full">
-          <div className="w-full">
-            <label className="input validator join-item">
-              <SearchIcon size={16} />
-              <input
-                {...register('q')}
-                type="text"
-                placeholder="Location name, e.g. Tokyo"
-                required
-                className={errors.q ? 'input-error' : ''}
-              />
-            </label>
-            <div className="validator-hint text-error">{errors.q?.message}</div>
-          </div>
-          <button disabled={isSubmitting} className="btn btn-neutral join-item">
-            {isSubmitting ? (
-              <span className="loading loading-spinner loading-sm"></span>
-            ) : (
-              'Search'
+    <div className="flex flex-col gap-6 p-4">
+      <Form {...form}>
+        <form onSubmit={handleSubmit(submitHandler)} className="flex gap-2">
+          <FormField
+            control={control}
+            name="q"
+            render={({ field }) => (
+              <FormItem className="relative flex-1">
+                <FormControl>
+                  <Input placeholder="Location Search, e.g. Tokyo" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
-          </button>
-        </div>
-      </form>
+          />
+          <Button
+            disabled={isSubmitting}
+            className="bg-secondary hover:bg-secondary/80 text-secondary-foreground min-w-22"
+          >
+            {isSubmitting ? <Loader2Icon className="animate-spin" /> : 'Search'}
+          </Button>
+        </form>
 
-      <div className="flex flex-1 flex-col gap-2 overflow-auto">
-        {hasSearched && locationResults.length === 0 ? (
-          <p className="text-error">
-            No results found, please search again with another location name
-          </p>
-        ) : (
-          locationResults.map((result) => (
-            <div key={result.place_id} className="card card-sm bg-base-100">
-              <div className="card-body">
-                <h4 className="card-title">{result.display_name}</h4>
-
-                <div className="card-actions justify-end">
-                  <button
-                    className="btn btn-info btn-sm"
-                    onClick={() => onResultSelected(result)}
-                  >
-                    Set Location
-                  </button>
+        {hasSearched ? (
+          <Card className="bg-background border-border top-full max-h-64 overflow-auto shadow-xl">
+            <CardContent className="p-0">
+              {isSubmitting ? (
+                <div className="p-4 text-center">
+                  <Loader2Icon className="text-accent mx-auto mb-2 h-5 w-5 animate-spin" />
+                  <p className="text-muted-foreground text-sm">
+                    Searching locations...
+                  </p>
                 </div>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
+              ) : locationResults.length > 0 ? (
+                <div className="divide-border divide-y">
+                  {locationResults.map((result) => (
+                    <button
+                      key={result.place_id}
+                      onClick={() => onResultSelected(result)}
+                      className="hover:bg-muted/50 flex w-full items-start gap-3 p-4 text-left transition-colors duration-200 hover:cursor-pointer"
+                    >
+                      <MapPinIcon className="text-accent mt-0.5 h-4 w-4 flex-shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-foreground text-sm font-medium">
+                          {result.display_name}
+                        </p>
+                        <p className="text-muted-foreground mt-1 text-xs">
+                          {result.lat}, {result.lon}
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-4 text-center">
+                  <p className="text-muted-foreground text-sm">
+                    No results found, please search again with another location
+                    name
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        ) : null}
+      </Form>
     </div>
   );
 }

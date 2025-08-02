@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuth } from '@/contexts/authContext';
+import { Loader2Icon } from 'lucide-react';
 import { useEffect } from 'react';
 
 export default function SignOut() {
@@ -11,8 +12,8 @@ export default function SignOut() {
   }, [signOut]);
 
   return (
-    <div className="card bg-base-200 container mx-auto mt-4 flex min-h-72 flex-col items-center justify-center">
-      <span className="loading loading-spinner loading-xl" />
+    <div className="flex flex-1 items-center justify-center">
+      <Loader2Icon size={72} className="animate-spin" />
     </div>
   );
 }
