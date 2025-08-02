@@ -8,7 +8,7 @@ import {
   SidebarMenu,
 } from '@/components/ui/sidebar';
 import { useSidebar } from '@/contexts/sidebarContext';
-import MapPinIcon from '@heroicons/react/24/solid/MapPinIcon';
+import { NotepadTextIcon } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { use } from 'react';
 
@@ -45,8 +45,8 @@ export default function SidebarLocationLogList({
               key={log.id}
               label={log.name}
               icon={
-                <MapPinIcon
-                  className={`size-5 ${selectedLog?.id === log.id || highlightedLog?.id === log.id ? 'text-accent' : ''}`}
+                <NotepadTextIcon
+                  className={`size-5 ${selectedLog?.id === log.id || highlightedLog?.id === log.id ? 'text-primary/50' : ''}`}
                 />
               }
               href={`/dashboard/location/${location.slug}/${log.id}`}

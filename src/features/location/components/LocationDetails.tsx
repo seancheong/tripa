@@ -1,17 +1,15 @@
 'use client';
 
-import Dialog from '@/components/Dialog';
-import { formatDate } from '@/utils/formatDate';
-import { showToast } from '@/utils/showToast';
-import { EllipsisVerticalIcon, MapPinPlusIcon, TrashIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { formatDateRange } from '@/utils/formatDate';
+import { ClockIcon, PlusIcon } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { use, useEffect, useState } from 'react';
+import { use, useEffect } from 'react';
 
-import { deleteLocation, getLocation } from '../actions/locationAction';
+import { getLocation } from '../actions/locationAction';
 import { useLocation } from '../contexts/locationContext';
 import { useLocationLog } from '../contexts/locationLogContext';
-import LocationCard from './LocationCard';
+import LocationLogCard from './LocationLogCard';
 
 interface LocationDetailsProps {
   locationData: ReturnType<typeof getLocation>;
@@ -23,10 +21,6 @@ export default function LocationDetails({
   const location = use(locationData);
   const { setSelectedLocation } = useLocation();
   const { selectedLog, setSelectedLog } = useLocationLog();
-  const router = useRouter();
-
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (location) setSelectedLocation(location);
@@ -35,67 +29,30 @@ export default function LocationDetails({
   if (!location)
     return <h2 className="text-error text-lg">Location not found</h2>;
 
-  const handleDeleteLocation = () => {
-    setDeleteDialogOpen(true);
-    (document.activeElement as HTMLAnchorElement)?.blur();
-  };
-
-  const handleConfirmDeleteLocation = async () => {
-    try {
-      setIsDeleting(true);
-      await deleteLocation(location.slug);
-      showToast({
-        message: `Location "${location.name}" deleted successfully.`,
-      });
-      router.push('/dashboard');
-    } catch (error) {
-      console.error('Failed to delete location:', error);
-      showToast({
-        type: 'error',
-        message: 'Failed to delete location. Please try again later.',
-        duration: 10000,
-      });
-    } finally {
-      setIsDeleting(false);
-    }
-  };
-
   return (
-    <>
-      <div className="flex items-center">
-        <h2 className="text-xl">Location page: {location.name}</h2>
-
-        <div className="dropdown">
-          <div
-            tabIndex={0}
-            role="button"
-            aria-label={`More actions for location "${location.name}"`}
-            className="btn btn-sm m-1 p-0"
-          >
-            <EllipsisVerticalIcon />
-          </div>
-          <ul
-            tabIndex={0}
-            className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
-          >
-            <li>
-              <button onClick={handleDeleteLocation}>
-                <TrashIcon size={16} /> Delete
-              </button>
-            </li>
-          </ul>
+    <div className="flex flex-col gap-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-foreground text-xl font-semibold">Travel Logs</h2>
+          <p className="text-muted-foreground text-sm">
+            Your experiences at this location
+          </p>
         </div>
+        <Link href={`/dashboard/location/${location.slug}/add`}>
+          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+            <PlusIcon size={16} />
+            Add Log
+          </Button>
+        </Link>
       </div>
 
-      {location.description && (
-        <p className="text-sm">{location.description}</p>
-      )}
-
       {location.locationLogs.length > 0 ? (
-        <div className="mt-4 flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden">
+        <div className="grid grid-cols-1 gap-6 p-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {location.locationLogs.map((log) => (
-            <LocationCard
+            <LocationLogCard
               key={log.id}
+              logid={log.id}
+              locationslug={location.slug}
               href={`/dashboard/location/${location.slug}/${log.id}`}
               title={log.name}
               description={log.description}
@@ -103,43 +60,20 @@ export default function LocationDetails({
               onMouseEnter={() => setSelectedLog(log)}
               onMouseLeave={() => setSelectedLog(null)}
             >
-              <p className="text-sm text-gray-500 italic">
-                {formatDate(log.startedAt)}{' '}
-                {log.startedAt !== log.endedAt &&
-                  `/ ${formatDate(log.endedAt)}`}
-              </p>
-            </LocationCard>
+              <div className="text-muted-foreground flex items-center gap-1 text-xs">
+                <ClockIcon size={12} />
+                <span>{formatDateRange(log.startedAt, log.endedAt)}</span>
+              </div>
+            </LocationLogCard>
           ))}
         </div>
       ) : (
-        <div className="mt-4">
-          <p className="text-sm italic">Add a location log to get started </p>
-
-          <Link
-            href={`/dashboard/location/${location.slug}/add`}
-            className="btn btn-primary mt-2"
-          >
-            Add location Log <MapPinPlusIcon size={16} />
-          </Link>
+        <div className="mt-4 flex flex-col gap-2">
+          <p className="text-muted-foreground text-lg font-semibold italic">
+            Add a location log to get started
+          </p>
         </div>
       )}
-
-      <Dialog
-        open={deleteDialogOpen}
-        title="Are you sure?"
-        description={`Deleting location "${location.name}" will remove all associated logs and cannot be undone.`}
-        confirmLabel={
-          isDeleting ? (
-            <span className="loading loading-spinner loading-sm"></span>
-          ) : (
-            'Delete'
-          )
-        }
-        confirmClassName="btn btn-error"
-        actionDisabled={isDeleting}
-        onConfirm={handleConfirmDeleteLocation}
-        onClose={() => setDeleteDialogOpen(false)}
-      />
-    </>
+    </div>
   );
 }

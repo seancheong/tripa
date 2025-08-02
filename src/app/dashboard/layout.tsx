@@ -34,10 +34,12 @@ export default async function DashboardLayout({ children }: PropsWithChildren) {
             <div className="relative flex flex-1 flex-col gap-4">
               <div className="h-full overflow-y-auto lg:h-1/2">{children}</div>
 
-              <div className="hidden lg:block lg:h-1/2">
-                <Suspense>
-                  <MapView locationsData={locationsData} />
-                </Suspense>
+              <div className="hidden rounded lg:block lg:h-1/2">
+                <div className="h-full w-full overflow-hidden rounded">
+                  <Suspense>
+                    <MapView locationsData={locationsData} />
+                  </Suspense>
+                </div>
               </div>
             </div>
           </div>

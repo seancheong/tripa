@@ -1,6 +1,7 @@
 'use client';
 
-import { CirclePlusIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { PlusIcon } from 'lucide-react';
 import Link from 'next/link';
 import { use } from 'react';
 
@@ -37,9 +38,14 @@ export default function LocationList({ locationsData }: LocationListProps) {
     </div>
   ) : (
     <div className="mt-4 flex flex-col gap-2">
-      <p>Add a location to get started</p>
-      <Link href="/dashboard/add" className="btn btn-primary w-40">
-        Add Location <CirclePlusIcon size={16} />
+      <h2 className="text-foreground text-xl font-semibold">
+        Add a location to get started
+      </h2>
+      <Link href="/dashboard/add" passHref>
+        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+          <PlusIcon size={16} />
+          Add Location
+        </Button>
       </Link>
     </div>
   );

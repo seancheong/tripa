@@ -1,15 +1,7 @@
 'use client';
 
 import { useSidebar } from '@/contexts/sidebarContext';
-import { useLocation } from '@/features/location/contexts/locationContext';
-import {
-  ArrowLeftIcon,
-  CirclePlusIcon,
-  EditIcon,
-  LogOutIcon,
-  MapIcon,
-  MapPinPlusIcon,
-} from 'lucide-react';
+import { CirclePlusIcon, LogOutIcon, MapIcon } from 'lucide-react';
 import { ReactNode } from 'react';
 
 import SidebarButton from './SidebarButton';
@@ -38,7 +30,7 @@ export default function AppSidebar({ locationList, logList }: SidebarProps) {
   return (
     <Sidebar collapsible="icon" className="relative h-full">
       <SidebarContent>
-        <SidebarTopSection isLocationPageSelected={false} />
+        <SidebarTopSection />
         {locationList}
         {logList}
       </SidebarContent>
@@ -57,45 +49,8 @@ export default function AppSidebar({ locationList, logList }: SidebarProps) {
   );
 }
 
-interface SidebarTopSectionProps {
-  isLocationPageSelected: boolean;
-}
-
-function SidebarTopSection({ isLocationPageSelected }: SidebarTopSectionProps) {
-  const { selectedLocation } = useLocation();
-
-  return isLocationPageSelected && selectedLocation ? (
-    <SidebarGroup>
-      <SidebarGroupLabel>Application</SidebarGroupLabel>
-      <SidebarGroupContent>
-        <SidebarMenu>
-          <SidebarButton
-            href="/dashboard"
-            label="Back to Locations"
-            icon={<ArrowLeftIcon size={16} />}
-          />
-
-          <SidebarButton
-            href={`/dashboard/location/${selectedLocation.slug}`}
-            label={selectedLocation.name}
-            icon={<MapIcon size={16} />}
-          />
-
-          <SidebarButton
-            href={`/dashboard/location/${selectedLocation.slug}/edit`}
-            label="Edit Location"
-            icon={<EditIcon size={16} />}
-          />
-
-          <SidebarButton
-            href={`/dashboard/location/${selectedLocation.slug}/add`}
-            label="Add Location Log"
-            icon={<MapPinPlusIcon size={16} />}
-          />
-        </SidebarMenu>
-      </SidebarGroupContent>
-    </SidebarGroup>
-  ) : (
+function SidebarTopSection() {
+  return (
     <SidebarGroup>
       <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
       <SidebarGroupContent>

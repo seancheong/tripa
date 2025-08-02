@@ -50,7 +50,7 @@ export default function LocationAddLogDetails({
 
   return (
     <LocationLogForm
-      submitLabel="Add Location Log"
+      submitLabel="Add"
       isFormSubmitting={isFormSubmitting}
       defaultValues={{
         name: '',
