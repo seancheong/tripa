@@ -9,12 +9,14 @@ type AuthContextType = {
   loading: boolean;
   user?: User;
   githubSignIn: () => Promise<void>;
+  googleSignIn: () => Promise<void>;
   signOut: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType>({
   loading: false,
   githubSignIn: async () => {},
+  googleSignIn: async () => {},
   signOut: async () => {},
 });
 
@@ -39,6 +41,21 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
+  const googleSignIn = async () => {
+    setLoading(true);
+    try {
+      await authClient.signIn.social({
+        provider: 'google',
+        callbackURL: '/dashboard',
+        errorCallbackURL: '/error',
+      });
+    } catch (err) {
+      setLoading(false);
+      console.error('Google login failed', err);
+      throw err;
+    }
+  };
+
   const signOut = async () => {
     await authClient.signOut();
     router.push('/');
@@ -51,6 +68,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         loading,
         user: session.data?.user,
         githubSignIn,
+        googleSignIn,
         signOut,
       }}
     >
