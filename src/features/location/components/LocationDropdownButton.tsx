@@ -19,7 +19,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { EditIcon, MoreVerticalIcon, Trash2Icon } from 'lucide-react';
+import {
+  EditIcon,
+  Loader2Icon,
+  MoreVerticalIcon,
+  Trash2Icon,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -97,7 +102,7 @@ export default function LocationDropdownButton({
               className="bg-error hover:bg-error/80 text-error-foreground"
             >
               {isDeleting ? (
-                <span className="loading loading-spinner loading-sm"></span>
+                <Loader2Icon size={16} className="animate-spin" />
               ) : (
                 'Delete'
               )}

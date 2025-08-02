@@ -52,7 +52,7 @@ export default async function Header() {
                         </div>
                       )}
                     </div>
-                    <span className="font-medium text-gray-900 dark:text-[hsl(var(--foreground))]">
+                    <span className="text-foreground font-medium">
                       {session.user.name}
                     </span>
                   </Button>
