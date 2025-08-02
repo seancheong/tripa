@@ -39,6 +39,7 @@ export default async function LocationSlugPage({
               )}
             </div>
             <LocationDropdownButton
+              id={location.id}
               href={location.slug}
               title={location.name}
             />

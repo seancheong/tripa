@@ -26,23 +26,28 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { deleteLocation } from '../actions/locationAction';
+import { useLocation } from '../contexts/locationContext';
 
 interface LocationDropdownButtonProps {
+  id: number;
   href: string;
   title: string;
 }
 
 export default function LocationDropdownButton({
+  id,
   href,
   title,
 }: LocationDropdownButtonProps) {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
+  const { setSelectedLocation } = useLocation();
 
   const handleConfirmDeleteLocation = async () => {
     try {
       setIsDeleting(true);
-      await deleteLocation(href);
+      await deleteLocation(id);
+      setSelectedLocation(null);
       toast.success(`Location "${title}" deleted successfully.`);
       router.push('/dashboard');
     } catch (error) {

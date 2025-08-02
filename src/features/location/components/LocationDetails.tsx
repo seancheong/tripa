@@ -46,7 +46,7 @@ export default function LocationDetails({
         </Link>
       </div>
 
-      {location.locationLogs.length > 0 ? (
+      {location.locationLogs.length > 0 && (
         <div className="grid grid-cols-1 gap-6 p-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {location.locationLogs.map((log) => (
             <LocationLogCard
@@ -66,12 +66,6 @@ export default function LocationDetails({
               </div>
             </LocationLogCard>
           ))}
-        </div>
-      ) : (
-        <div className="mt-4 flex flex-col gap-2">
-          <p className="text-muted-foreground text-lg font-semibold italic">
-            Add a location log to get started
-          </p>
         </div>
       )}
     </div>
