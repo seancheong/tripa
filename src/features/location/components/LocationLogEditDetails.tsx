@@ -52,7 +52,7 @@ export default function LocationLogEditDetails({
         message: `Location Log "${log.name}" updated successfully.`,
       });
       router.push(`/dashboard/location/${location.slug}`);
-    } catch (error) {
+    } catch {
       setFormSubmitting(false);
       showToast({
         message: 'Failed to update location log',

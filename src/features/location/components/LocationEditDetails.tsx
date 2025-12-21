@@ -50,7 +50,7 @@ export default function LocationEditDetails({
       await updateLocation(location.slug, data);
       showToast({ message: `${location.name} location edited` });
       router.push(`/dashboard/location/${location.slug}`);
-    } catch (error) {
+    } catch {
       setFormSubmitting(false);
       showToast({
         message: `Failed to edit ${location.slug}. Please try again.`,

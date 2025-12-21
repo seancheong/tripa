@@ -13,11 +13,13 @@ export default function ThemeToggleButton() {
   const { resolvedTheme, setTheme } = useTheme();
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
   useEffect(() => {
     if (mounted) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsDark(resolvedTheme === 'dark');
     }
   }, [resolvedTheme, mounted]);
