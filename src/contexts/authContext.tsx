@@ -1,7 +1,13 @@
-import { User } from 'better-auth';
+import type { User } from 'better-auth';
 import { createAuthClient } from 'better-auth/react';
 import { useRouter } from 'next/navigation';
-import { PropsWithChildren, createContext, useContext, useState } from 'react';
+import {
+  type PropsWithChildren,
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 
 const authClient = createAuthClient();
 
@@ -26,7 +32,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const router = useRouter();
   const session = authClient.useSession();
 
-  const githubSignIn = async () => {
+  const githubSignIn = useCallback(async () => {
     setLoading(true);
     try {
       await authClient.signIn.social({
@@ -39,9 +45,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       console.error('Github login failed', err);
       throw err;
     }
-  };
+  }, []);
 
-  const googleSignIn = async () => {
+  const googleSignIn = useCallback(async () => {
     setLoading(true);
     try {
       await authClient.signIn.social({
@@ -54,13 +60,18 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       console.error('Google login failed', err);
       throw err;
     }
-  };
+  }, []);
 
-  const signOut = async () => {
-    await authClient.signOut();
-    router.push('/');
-    router.refresh();
-  };
+  const signOut = useCallback(async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push('/');
+          router.refresh();
+        },
+      },
+    });
+  }, [router]);
 
   return (
     <AuthContext
