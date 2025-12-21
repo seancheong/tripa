@@ -6,7 +6,7 @@ Tripa is a location-based app that allows users to mark and log places they have
 
 ## Tech Stack
 
-- [Next.js 15 (App Router)](https://nextjs.org/) – Framework
+- [Next.js (App Router)](https://nextjs.org/) – Framework
 - [Tailwind CSS](https://tailwindcss.com/) – Styling
 - [ShadCN UI](https://ui.shadcn.com/) – UI Components
 - [BetterAuth](https://www.better-auth.com/) – Authentication
