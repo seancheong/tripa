@@ -4,12 +4,13 @@ import db from '@/db';
 import { locationLog } from '@/db/schema';
 import {
   InsertLocation,
-  InsertLocationType,
+  type InsertLocationType,
   location,
 } from '@/db/schema/location';
 import { getSession } from '@/utils/auth';
 import { and, eq } from 'drizzle-orm';
 import { customAlphabet } from 'nanoid';
+import { revalidatePath } from 'next/cache';
 import slugify from 'slug';
 
 export type Location = Awaited<ReturnType<typeof getLocations>>[number];
@@ -98,6 +99,8 @@ export async function addLocation(data: InsertLocationType) {
     })
     .returning();
 
+  revalidatePath('/dashboard');
+
   return created;
 }
 
@@ -127,6 +130,8 @@ export async function updateLocation(slug: string, data: InsertLocationType) {
     throw new Error('Location not found or unauthorized');
   }
 
+  revalidatePath('/dashboard');
+
   return updated[0];
 }
 
@@ -151,6 +156,8 @@ export async function deleteLocation(locationId: number) {
   if (deleted.length === 0) {
     throw new Error('Location not found or unauthorized');
   }
+
+  revalidatePath('/dashboard');
 
   return deleted[0];
 }
