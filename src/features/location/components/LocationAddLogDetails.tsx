@@ -38,7 +38,7 @@ export default function LocationAddLogDetails({
       showToast({
         message: 'New Location Log Added',
       });
-    } catch (error) {
+    } catch {
       setFormSubmitting(false);
       showToast({
         message: 'Failed to add location log',
@@ -55,7 +55,9 @@ export default function LocationAddLogDetails({
       defaultValues={{
         name: '',
         description: '',
+        // eslint-disable-next-line react-hooks/purity
         startedAt: Date.now() - 24 * 60 * 60 * 1000, // Default to 24 hours ago
+        // eslint-disable-next-line react-hooks/purity
         endedAt: Date.now(),
         lat: location.lat,
         long: location.long,

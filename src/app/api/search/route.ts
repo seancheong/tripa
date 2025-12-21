@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
         'Cache-Control': 'public, max-age=3600, stale-while-revalidate=60',
       },
     });
-  } catch (error) {
+  } catch {
     return new Response(
       JSON.stringify({ error: 'Failed to fetch location data from Nominatim' }),
       {

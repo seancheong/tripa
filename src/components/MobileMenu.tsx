@@ -28,6 +28,7 @@ export default function MobileMenu({ user }: MobileMenuProps) {
   const { resolvedTheme, setTheme } = useTheme();
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsDark(resolvedTheme === 'dark');
   }, [setIsDark, resolvedTheme]);
 

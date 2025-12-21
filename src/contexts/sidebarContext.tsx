@@ -30,6 +30,7 @@ export const SidebarProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     const saved = localStorage.getItem(isSidebarOpenKey);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSidebarOpen(saved === 'true');
   }, []);
 

@@ -32,7 +32,7 @@ export default function LocationAddPage() {
       await addLocation(data);
       showToast({ message: 'New location added' });
       router.push('/dashboard');
-    } catch (error) {
+    } catch {
       setFormSubmitting(false);
       showToast({
         message: 'Failed to add location. Please try again.',

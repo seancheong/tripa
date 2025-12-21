@@ -1,11 +1,5 @@
 import { usePathname } from 'next/navigation';
-import {
-  PropsWithChildren,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { PropsWithChildren, createContext, useContext, useState } from 'react';
 
 import type { Location, NewLocation } from '../actions/locationAction';
 
@@ -33,6 +27,7 @@ const LocationContext = createContext<LocationContextType>({
 
 export const LocationProvider = ({ children }: PropsWithChildren) => {
   const pathname = usePathname();
+  const inLocationDashboard = pathname.startsWith('/dashboard/location');
 
   const [highlightedLocation, setHighlightedLocation] =
     useState<Location | null>(null);
@@ -42,19 +37,21 @@ export const LocationProvider = ({ children }: PropsWithChildren) => {
   const [newLocation, setNewLocation] = useState<NewLocation | null>(null);
   const [editedLocation, setEditedLocation] = useState<Location | null>(null);
 
-  useEffect(() => {
-    if (!pathname.startsWith('/dashboard/location')) setSelectedLocation(null);
-  }, [pathname, setSelectedLocation]);
+  const safeSetSelectedLocation = (location: Location | null) => {
+    if (!inLocationDashboard) return;
+
+    setSelectedLocation(location);
+  };
 
   return (
     <LocationContext
       value={{
         highlightedLocation,
-        selectedLocation,
+        selectedLocation: inLocationDashboard ? selectedLocation : null,
         newLocation,
         editedLocation,
         setHighlightedLocation,
-        setSelectedLocation,
+        setSelectedLocation: safeSetSelectedLocation,
         setNewLocation,
         setEditedLocation,
       }}
